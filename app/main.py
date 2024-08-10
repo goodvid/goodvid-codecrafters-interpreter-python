@@ -32,8 +32,6 @@ def main():
         
 
         if c == ' ' or c == '\t' or c == '\n':
-          
-          
           pass
         elif d == '//':
           if ('\n' in file_contents[i: ]):
@@ -48,7 +46,7 @@ def main():
           print(single_tokens[c] + ' ' + c + ' null')
         else:
           line_number = file_contents.count("\n", 0, file_contents.find(c)) + 1
-          print(f'[line {line_number}] Error: Unexpected character: {c}!', file=sys.stderr)
+          print(f'[line {line_number}] Error: Unexpected character: {c}', file=sys.stderr)
           isError = True
         i += update
 
