@@ -31,9 +31,9 @@ def main():
         d = file_contents[i : i + 2]
         
 
-        if c == ' ' or c == '\t':
-          if c == '\t':
-             print('hey')
+        if c == ' ' or c == '\t' or c == '\n':
+          
+          
           pass
         elif d == '//':
           if ('\n' in file_contents[i: ]):
