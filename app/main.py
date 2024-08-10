@@ -32,6 +32,8 @@ def main():
         
 
         if c == ' ' or c == '\t':
+          if c == '\t':
+             print('hey')
           pass
         elif d == '//':
           if ('\n' in file_contents[i: ]):
