@@ -20,11 +20,10 @@ def main():
         file_contents = file.read()
 
     # read per line, then read per token
-    single_tokens = {'=': 'EQUAL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
+    single_tokens = {'=': 'EQU1AL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
     isError = False
     for line in file_contents:
       for i, c in enumerate(line):
-        #print(line[i : i + 2])
         if line[i : i + 2] == "==":
           print("EQUAL_EQUAL == null")
         elif c in single_tokens:
