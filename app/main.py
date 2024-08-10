@@ -27,7 +27,7 @@ def main():
         if c in single_tokens:
           print(single_tokens[c] + ' ' + c + ' null')
         else:
-          print(f'[line {i}] Error: Unexpected character: {c}', file=sys.stderr)
+          print(f'[line {i + 1}] Error: Unexpected character: {c}', file=sys.stderr)
           isError = True
     if isError:
       exit(65)
