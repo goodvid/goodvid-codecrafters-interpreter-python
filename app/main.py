@@ -50,16 +50,7 @@ def main():
           isError = True
         i += update
 
-      # for i in range(len(line)):
-      #   c = line[i]
-      #   print(line[i], i)
-        # if line[i : i + 2] == "==":
-        #   print("EQUAL_EQUAL == null")
-        # elif c in single_tokens:
-        #   print(single_tokens[c] + ' ' + c + ' null')
-        # else:
-        #   print(f'[line {i + 1}] Error: Unexpected character: {c}', file=sys.stderr)
-        #   isError = True
+      
     print('EOF  null')
     if isError:
       exit(65)
