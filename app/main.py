@@ -31,7 +31,8 @@ def main():
         d = file_contents[i : i + 2]
 
         if d == '//':
-           pass
+          update += file_contents.index('\n',i)
+          pass
         elif d in double_tokens:
           print(double_tokens[d] + ' ' + d + ' null')
           update += 1
