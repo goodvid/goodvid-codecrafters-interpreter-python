@@ -29,10 +29,11 @@ def main():
         update = 1
         c = file_contents[i]
         d = file_contents[i : i + 2]
+        
 
-        if c.isspace() or c == '\t':
+        if c == ' ' or c == '\t':
            pass
-        if d == '//':
+        elif d == '//':
           if ('\n' in file_contents[i: ]):
             update += file_contents.index('\n', i)
           else:
