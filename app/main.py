@@ -32,7 +32,8 @@ def main():
         elif c in single_tokens:
           print(single_tokens[c] + ' ' + c + ' null')
         else:
-          print(f'[line {i + 1}] Error: Unexpected character: {c}', file=sys.stderr)
+          line_number = file_contents.count("\n", 0, file_contents.find(c)) + 1
+          print(f'[line {line_number}] Error: Unexpected character: {c}', file=sys.stderr)
           isError = True
         i += update
 
