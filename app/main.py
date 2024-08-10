@@ -29,7 +29,7 @@ def main():
             print("EQUAL_EQUAL == null")
           else:
             print('EQUAL = null')
-        if c in single_tokens:
+        elif c in single_tokens:
           print(single_tokens[c] + ' ' + c + ' null')
         else:
           print(f'[line {i + 1}] Error: Unexpected character: {c}', file=sys.stderr)
