@@ -29,12 +29,13 @@ def main():
         else:
           print(f'[line {i + 1}] Error: Unexpected character: {c}', file=sys.stderr)
           isError = True
+    print('EOF  null')
     if isError:
       exit(65)
     
     exit(1)
 
           
-    print('EOF  null')
+    
 if __name__ == "__main__":
     main()
