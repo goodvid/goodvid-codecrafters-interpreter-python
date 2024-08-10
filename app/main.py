@@ -32,13 +32,13 @@ def main():
         
 
         if c == ' ' or c == '\t':
-           pass
+          pass
         elif d == '//':
           if ('\n' in file_contents[i: ]):
             update += file_contents.index('\n', i)
           else:
             update += len(file_contents)
-          pass
+          
         elif d in double_tokens:
           print(double_tokens[d] + ' ' + d + ' null')
           update += 1
