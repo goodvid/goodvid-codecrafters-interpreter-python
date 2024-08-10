@@ -24,7 +24,9 @@ def main():
     isError = False
     for line in file_contents:
       for i, c in enumerate(line):
+        print(line[i : i + 2])
         if line[i : i + 2] == '==':
+
           
           print("EQUAL_EQUAL == null")
           
