@@ -33,7 +33,7 @@ def main():
     if isError:
       exit(65)
     
-    exit(1)
+    exit(0)
 
           
     
