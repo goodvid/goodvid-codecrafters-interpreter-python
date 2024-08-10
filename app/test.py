@@ -1,4 +1,5 @@
-c = '==='
+c = '=='
 
 for index, i in enumerate(c):
-    print(c[ index : index + 2])
+    if c[index: index + 2] == '==':
+        print(1)
