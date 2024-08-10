@@ -22,15 +22,18 @@ def main():
     
     single_tokens = {'=': 'EQUAL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
     isError = False
-    for i in range(len(file_contents)):
+    i = 0
+    while i < (len(file_contents)):
         c = file_contents[i]
         if file_contents[i : i + 2] == "==":
           print("EQUAL_EQUAL == null")
+          i += 1
         elif c in single_tokens:
           print(single_tokens[c] + ' ' + c + ' null')
         else:
           print(f'[line {i + 1}] Error: Unexpected character: {c}', file=sys.stderr)
           isError = True
+        i += 1
 
       # for i in range(len(line)):
       #   c = line[i]
