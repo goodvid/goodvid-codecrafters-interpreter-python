@@ -20,8 +20,9 @@ def main():
         file_contents = file.read()
 
     
-    single_tokens = {'=': 'EQUAL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
+    single_tokens = {'!': 'BANG', '=': 'EQUAL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
     double_tokens = {'==':'EQUAL_EQUAL', '!=': 'BANG_EQUAL'}#,'<=':'LEQ', '>=':'GEQ'}
+    #
     isError = False
     i = 0
     while i < (len(file_contents)):
