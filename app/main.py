@@ -24,16 +24,17 @@ def main():
     isError = False
     i = 0
     while i < (len(file_contents)):
+        update = 1
         c = file_contents[i]
         if file_contents[i : i + 2] == "==":
           print("EQUAL_EQUAL == null")
-          i += 1
+          update += 1
         elif c in single_tokens:
           print(single_tokens[c] + ' ' + c + ' null')
         else:
           print(f'[line {i + 1}] Error: Unexpected character: {c}', file=sys.stderr)
           isError = True
-        i += 1
+        i += update
 
       # for i in range(len(line)):
       #   c = line[i]
