@@ -30,7 +30,7 @@ def main():
         c = file_contents[i]
         d = file_contents[i : i + 2]
 
-        if c == ' ' or c == '\t':
+        if c.isspace() or c == '\t':
            pass
         if d == '//':
           if ('\n' in file_contents[i: ]):
