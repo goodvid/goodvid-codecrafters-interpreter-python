@@ -25,7 +25,7 @@ def main():
     for line in file_contents:
       for i, c in enumerate(line):
         if c == '=':
-          if i + 1 < len(line) and line[i + 1] == '=':
+          if i + 1 < len(line) - 1 and line[i + 1] == '=':
             print("EQUAL_EQUAL == null")
           else:
             print('EQUAL = null')
