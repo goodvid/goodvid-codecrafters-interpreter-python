@@ -21,12 +21,19 @@ def main():
 
     # read per line, then read per token
     single_tokens = {';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
+    isError = False
     for line in file_contents:
-      for i, c in line:
+      for i, c in enumerate(line):
         if c in single_tokens:
           print(single_tokens[c] + ' ' + c + ' null')
         else:
-          print(f'[line {i}] Error: Unexpected character: {c}')
+          print(f'[line {i}] Error: Unexpected character: {c}', file=sys.stderr)
+          isError = True
+    if isError:
+      exit(65)
+    
+    exit(1)
+
           
     print('EOF  null')
 if __name__ == "__main__":
