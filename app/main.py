@@ -19,11 +19,14 @@ def main():
     with open(filename) as file:
         file_contents = file.read()
 
-    if file_contents:
-        raise NotImplementedError("Scanner not implemented")
-    else:
-        print("EOF  null") # Placeholder, remove this line when implementing the scanner
+    # read per line, then read per token
 
-
+    for line in file_contents:
+      for c in line:
+        if c == '(':
+          print('LEFT_PAREN ( null')
+        if c == ')':
+          print('RIGHT_PAREN ) null')
+    print('EOF null')
 if __name__ == "__main__":
     main()
