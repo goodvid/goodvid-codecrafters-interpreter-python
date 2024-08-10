@@ -24,6 +24,11 @@ def main():
     isError = False
     for line in file_contents:
       for i, c in enumerate(line):
+        if c == '=':
+          if i + 1 < len(line) and line[i + 1] == '=':
+            print("EQUAL_EQUAL == null")
+          else:
+            print('EQUAL = null')
         if c in single_tokens:
           print(single_tokens[c] + ' ' + c + ' null')
         else:
