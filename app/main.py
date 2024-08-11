@@ -103,7 +103,8 @@ def main():
         elif c.isalpha() or c == '_':
           start = i
           ident = ""
-          while (start < len(file_contents) and (file_contents[start].isalpha() or file_contents[start] == '_')):
+          
+          while (start < len(file_contents) and file_contents[start] != ' '):
             #print(start)
             ident += file_contents[start]
             start += 1
