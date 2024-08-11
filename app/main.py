@@ -89,8 +89,11 @@ def main():
              number += file_contents[start]
              start += 1
           
+          if number[-1] == '.':
+             number = number[:-1]
           value = number
           number = float(number)
+
           
           print(f'NUMBER {value} {number}')
           i = start - 1
