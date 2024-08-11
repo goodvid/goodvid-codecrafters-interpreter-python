@@ -86,9 +86,12 @@ def main():
              number += file_contents[start]
              start += 1
           
+          value = number
           if number[-1] == '.':
-             number_prop += '0'
-          print(f'NUMBER {int(number)} {number}')
+             number += '0'
+             value = value[:-1]
+          
+          print(f'NUMBER {int(value)} {number}')
           i = start - 1
             
           
