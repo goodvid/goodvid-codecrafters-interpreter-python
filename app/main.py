@@ -1,5 +1,5 @@
 import sys
-#todo fix why index of '\n' isnt working. its just seeking to the end of the file if theres a comment
+#todo abstract string, number and identifier
 
 def find_line_end(file, start):
   if '\n' in file[start: ]:
@@ -40,6 +40,7 @@ def main():
 
         if c == ' ' or c == '\t' or c == '\n':
           pass
+        
         elif d == '//':
           if ("\n" in file_contents[i: ]):
             #print("HELLO",find_line_end(file_contents, i) )
@@ -47,6 +48,7 @@ def main():
             #print(update)
           else:
             i = len(file_contents)
+        
         elif c == '\"':
           start = i + 1
           line_end = find_line_end(file_contents, i)
@@ -109,8 +111,13 @@ def main():
             ident += file_contents[start]
             start += 1
           i = start - 1
-          print(f'IDENTIFIER {ident} null')
+          if ident in set(["and", "class", "else", "false", "for", "fun", "if", "nil", "or", "print", "return", "super", "this", "true", "var", "while"]):
+             print(f'{ident.upper()} {ident} null')
+          else:
+            print(f'IDENTIFIER {ident} null')
         
+        
+
         elif d in double_tokens:
           print(double_tokens[d] + ' ' + d + ' null')
           update += 1
