@@ -68,6 +68,21 @@ def main():
           i = end
           
           print(f'STRING \"{string}\" {string}')
+        
+        elif c.isdigit():
+           # keep going until its not a number no more (also include , .)
+          number = ""
+          
+          start = i
+
+          
+          
+          #print(f'NUMBER {number} {number} {start}')
+          while (start < len(file_contents) and (file_contents[start].isdigit() or file_contents[start] == '.') ):
+             number += file_contents[start]
+             start += 1
+          print(f'NUMBER {number} {number}')
+          i = start - 1
             
           
           
