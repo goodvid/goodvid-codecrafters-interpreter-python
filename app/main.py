@@ -87,8 +87,8 @@ def main():
              start += 1
           
           if number[-1] == '.':
-             number += '0'
-          print(f'NUMBER {number} {number}')
+             number_prop += '0'
+          print(f'NUMBER {int(number)} {number}')
           i = start - 1
             
           
