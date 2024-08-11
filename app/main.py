@@ -1,5 +1,5 @@
 import sys
-
+#todo fix why index of '\n' isnt working. its just seeking to the end of the file if theres a comment
 
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -26,6 +26,7 @@ def main():
     isError = False
     i = 0
     while i < (len(file_contents)):
+        #print(i, len(file_contents))
         update = 1
         c = file_contents[i]
         d = file_contents[i : i + 2]
@@ -34,10 +35,12 @@ def main():
         if c == ' ' or c == '\t' or c == '\n':
           pass
         elif d == '//':
-          if ('\n' in file_contents[i: ]):
-            update += file_contents.index('\n', i)
+          if ("\n" in file_contents[i: ]):
+            #print("HELLO",file_contents.index('\n', i) )
+            i = file_contents.index('\n', i) # should be go to that index, not jump by that many
+            #print(update)
           else:
-            update += len(file_contents)
+            i = len(file_contents)
           
         elif d in double_tokens:
           print(double_tokens[d] + ' ' + d + ' null')
