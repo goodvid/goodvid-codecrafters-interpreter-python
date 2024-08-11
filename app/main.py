@@ -1,6 +1,10 @@
 import sys
 #todo fix why index of '\n' isnt working. its just seeking to the end of the file if theres a comment
 
+def find_line_end(file, start):
+  if '\n' in file[start: ]:
+    return file.index('\n', start)
+  return len(file)
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
     print("Logs from your program will appear here!", file=sys.stderr)
@@ -25,6 +29,8 @@ def main():
     #
     isError = False
     i = 0
+
+    
     while i < (len(file_contents)):
         #print(i, len(file_contents))
         update = 1
@@ -36,11 +42,33 @@ def main():
           pass
         elif d == '//':
           if ("\n" in file_contents[i: ]):
-            #print("HELLO",file_contents.index('\n', i) )
-            i = file_contents.index('\n', i) # should be go to that index, not jump by that many
+            #print("HELLO",find_line_end(file_contents, i) )
+            i = find_line_end(file_contents, i) # should be go to that index, not jump by that many
             #print(update)
           else:
             i = len(file_contents)
+        elif c == '\"':
+          start = i + 1
+          line_end = find_line_end(file_contents, i)
+          
+          if '\"' in file_contents[start : line_end]:
+             end = file_contents.index('\"', start, line_end)
+          else:
+             i = line_end
+             line_number = file_contents.count("\n", 0, i) + 1
+             print(f"[line {line_number}] Error: Unterminated string.")
+             continue
+
+          string = ""
+
+          while start < end :
+            string += file_contents[start]
+            start += 1
+          i = line_end
+          
+          print(f'STRING \"{string}\" {string}')
+            
+          
           
         elif d in double_tokens:
           print(double_tokens[d] + ' ' + d + ' null')
