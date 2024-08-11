@@ -91,6 +91,7 @@ def main():
           
           if number[-1] == '.':
              number = number[:-1]
+             start -= 1
           value = number
           number = float(number)
 
