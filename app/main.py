@@ -91,7 +91,7 @@ def main():
              number += '0'
              value = value[:-1]
           
-          print(f'NUMBER {int(value)} {number}')
+          print(f'NUMBER {value} {number}')
           i = start - 1
             
           
