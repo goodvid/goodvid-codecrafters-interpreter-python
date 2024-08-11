@@ -90,6 +90,7 @@ def main():
           if number[-1] == '.':
              number += '0'
              value = value[:-1]
+             start -= 1
           
           print(f'NUMBER {value} {number}')
           i = start - 1
