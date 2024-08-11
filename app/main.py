@@ -75,10 +75,14 @@ def main():
           
           start = i
 
+          mods = 0
+
           
           
           #print(f'NUMBER {number} {number} {start}')
-          while (start < len(file_contents) and (file_contents[start].isdigit() or file_contents[start] == '.') ):
+          while (start < len(file_contents) and (file_contents[start].isdigit() or mods < 1)):
+             if (file_contents[start] == '.'):
+                mods += 1
              number += file_contents[start]
              start += 1
           print(f'NUMBER {number} {number}')
