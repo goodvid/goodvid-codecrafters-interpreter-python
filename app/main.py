@@ -80,7 +80,7 @@ def main():
           
           
           #print(f'NUMBER {number} {number} {start}')
-          while (start < len(file_contents) and (file_contents[start].isdigit() and mods < 1)):
+          while (start < len(file_contents) and (file_contents[start].isdigit() and mods <= 1)):
              if (file_contents[start] == '.'):
                 mods += 1
              number += file_contents[start]
