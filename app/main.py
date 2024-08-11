@@ -80,17 +80,17 @@ def main():
           
           
           #print(f'NUMBER {number} {number} {start}')
-          while (start < len(file_contents) and (file_contents[start].isdigit() and mods <= 1)):
+          while (start < len(file_contents) and ((file_contents[start].isdigit() or file_contents[start] == '.'))):
              if (file_contents[start] == '.'):
                 mods += 1
+             if mods > 1:
+                i = start - 1
+                break
              number += file_contents[start]
              start += 1
           
           value = number
-          if number[-1] == '.':
-             number += '0'
-             value = value[:-1]
-             start -= 1
+          number = float(number)
           
           print(f'NUMBER {value} {number}')
           i = start - 1
