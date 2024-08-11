@@ -56,7 +56,7 @@ def main():
           else:
              i = line_end
              line_number = file_contents.count("\n", 0, i) + 1
-             print(f"[line {line_number}] Error: Unterminated string.")
+             print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
              isError = True
              continue
 
