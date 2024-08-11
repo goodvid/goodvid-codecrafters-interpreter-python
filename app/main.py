@@ -57,6 +57,7 @@ def main():
              i = line_end
              line_number = file_contents.count("\n", 0, i) + 1
              print(f"[line {line_number}] Error: Unterminated string.")
+             isError = True
              continue
 
           string = ""
