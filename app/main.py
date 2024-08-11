@@ -85,6 +85,9 @@ def main():
                 mods += 1
              number += file_contents[start]
              start += 1
+          
+          if number[-1] == '.':
+             number += '0'
           print(f'NUMBER {number} {number}')
           i = start - 1
             
