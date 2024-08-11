@@ -104,7 +104,7 @@ def main():
           start = i
           ident = ""
           
-          while (start < len(file_contents) and file_contents[start] != ' '):
+          while (start < len(file_contents) and (file_contents[start].isalnum() or file_contents[start] == '_')):
             #print(start)
             ident += file_contents[start]
             start += 1
