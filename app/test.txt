@@ -1,3 +1,2 @@
 ()
-"foo baz"
-"k
+"foo baz" "k

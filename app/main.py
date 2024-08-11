@@ -64,7 +64,7 @@ def main():
           while start < end :
             string += file_contents[start]
             start += 1
-          i = line_end
+          i = end
           
           print(f'STRING \"{string}\" {string}')
             
