@@ -134,7 +134,7 @@ def parse():
       if token[0] == 'LEFT_PAREN':
          stack = ['(']
          start = i
-         content = ['(']
+         content = ['(', 'group']
          while (start < len(tokens)):
             content.append(tokens[start][2])
             if tokens[start][0] == 'LEFT_PAREN':
