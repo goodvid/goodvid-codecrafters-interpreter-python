@@ -98,7 +98,7 @@ def tokenize(file_contents):
              #print(f'{ident.upper()} {ident} null')
              tokens.append([ident.upper(), ident, 'null'])
           else:
-            tokens.append(['IDENTIFIER, ident, null'])
+            tokens.append(['IDENTIFIER', ident, 'null'])
             #print(f'IDENTIFIER {ident} null')
         
         
@@ -152,7 +152,7 @@ def main():
 
     if command == "parse":
        for token in tokens:
-          if token[0] == 'TRUE' or token[0] == 'FALSE':
+          if token[0] == 'TRUE' or token[0] == 'FALSE' or token[0] == 'NIL':
              print(token[0].lower())
     exit(0)
 
