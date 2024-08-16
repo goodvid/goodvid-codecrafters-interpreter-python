@@ -134,7 +134,7 @@ def main():
     command = sys.argv[1]
     filename = sys.argv[2]
 
-    if command != "tokenize":
+    if command not in set('tokenize', 'parse'):
         print(f"Unknown command: {command}", file=sys.stderr)
         exit(1)
 
@@ -144,11 +144,16 @@ def main():
     
     single_tokens = {'/': 'SLASH','<':'LESS', '>': 'GREATER','!': 'BANG', '=': 'EQUAL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
     double_tokens = {'==':'EQUAL_EQUAL', '!=': 'BANG_EQUAL','<=':'LESS_EQUAL', '>=':'GREATER_EQUAL'}
-    #
     isError = False
     i = 0
 
+
     tokens = tokenize(file_contents)
+
+    if command == "parse":
+       for token in tokens:
+          if token[0] == 'TRUE':
+             print('true')
     exit(0)
 
           
