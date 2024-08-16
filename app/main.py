@@ -147,7 +147,7 @@ def parse():
             print(content.join(' '))
          i = start
       if token[1] in identifiers:
-            print(token[1])#.lower())
+            print(token[1])#.lower())22
           #dd
       if token[0] == 'NUMBER':
              print(token[2])
