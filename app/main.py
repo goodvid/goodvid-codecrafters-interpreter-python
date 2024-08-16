@@ -157,7 +157,7 @@ def main():
     if command == 'tokenize':
        for token in tokens:
           print(token[0],  token[1],  token[2])
-       print('EOF  null')
+       
     exit(0)
 
           
