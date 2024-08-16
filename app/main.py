@@ -152,8 +152,7 @@ def main():
 
     if command == "parse":
        for token in tokens:
-          if token[0] == 'TRUE' or token[0] == 'FALSE' or token[0] == 'NIL':
-             print(token[0].lower())
+          print(token[0].lower())
     exit(0)
 
           
