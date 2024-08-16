@@ -13,9 +13,9 @@ def tokenize(file_contents):
     double_tokens = {'==':'EQUAL_EQUAL', '!=': 'BANG_EQUAL','<=':'LESS_EQUAL', '>=':'GREATER_EQUAL'}
     
     i = 0
-    
+    isError = False
     while i < (len(file_contents)):
-        isError = False
+        
         
         update = 1
         c = file_contents[i]
