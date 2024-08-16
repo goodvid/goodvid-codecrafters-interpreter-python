@@ -156,6 +156,9 @@ def main():
           
           if token[0] == 'NUMBER':
              print(token[2])
+          
+          if token[0] == 'STRING':
+             print(token[2])
     
     if command == 'tokenize':
       for token in tokens:
