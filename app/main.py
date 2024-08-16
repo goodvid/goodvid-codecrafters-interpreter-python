@@ -6,13 +6,14 @@ def find_line_end(file, start):
     return file.index('\n', start)
   return len(file)
 tokens = []
-
+single_tokens = {'/': 'SLASH','<':'LESS', '>': 'GREATER','!': 'BANG', '=': 'EQUAL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
+double_tokens = {'==':'EQUAL_EQUAL', '!=': 'BANG_EQUAL','<=':'LESS_EQUAL', '>=':'GREATER_EQUAL'}
+identifiers = ["and", "class", "else", "false", "for", "fun", "if", "nil", "or", "#print", "return", "super", "this", "true", "var", "while"]
+    
+    
 def tokenize(file_contents):
     i = 0
-    single_tokens = {'/': 'SLASH','<':'LESS', '>': 'GREATER','!': 'BANG', '=': 'EQUAL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
-    double_tokens = {'==':'EQUAL_EQUAL', '!=': 'BANG_EQUAL','<=':'LESS_EQUAL', '>=':'GREATER_EQUAL'}
     
-    i = 0
     isError = False
     while i < (len(file_contents)):
         
@@ -97,7 +98,7 @@ def tokenize(file_contents):
             ident += file_contents[start]
             start += 1
           i = start - 1
-          if ident in set(["and", "class", "else", "false", "for", "fun", "if", "nil", "or", "#print", "return", "super", "this", "true", "var", "while"]):
+          if ident in set(identifiers):
              #print(f'{ident.upper()} {ident} null')
              tokens.append([ident.upper(), ident, 'null'])
           else:
@@ -150,7 +151,7 @@ def main():
 
     if command == "parse":
        for token in tokens:
-          if token[0] != 'EOF':
+          if token[0] in identifiers:
             print(token[0].lower())
     
     if command == 'tokenize':
