@@ -39,7 +39,7 @@ def tokenize(file_contents):
           else:
              i = line_end
              line_number = file_contents.count("\n", 0, i) + 1
-             #print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
+             print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
              isError = True
              continue
 
@@ -112,7 +112,7 @@ def tokenize(file_contents):
           tokens.append([single_tokens[c], c, 'null'])
         else:
           line_number = file_contents.count("\n", 0, i) + 1
-          #print(f'[line {line_number}] Error: Unexpected character: {c}', file=sys.stderr)
+          print(f'[line {line_number}] Error: Unexpected character: {c}', file=sys.stderr)
           isError = True
         i += update
 
