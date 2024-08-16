@@ -6,7 +6,7 @@ def find_line_end(file, start):
     return file.index('\n', start)
   return len(file)
 tokens = []
-isError = False
+
 def tokenize(file_contents):
     i = 0
     single_tokens = {'/': 'SLASH','<':'LESS', '>': 'GREATER','!': 'BANG', '=': 'EQUAL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
@@ -15,6 +15,7 @@ def tokenize(file_contents):
     i = 0
     
     while i < (len(file_contents)):
+        isError = False
         
         update = 1
         c = file_contents[i]
@@ -41,7 +42,7 @@ def tokenize(file_contents):
           else:
              i = line_end
              line_number = file_contents.count("\n", 0, i) + 1
-             #print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
+             print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
              isError = True
              continue
 
@@ -122,7 +123,7 @@ def tokenize(file_contents):
     #print('EOF  null')
     
     
-    #return tokens
+    return isError
     
 def main():
     
@@ -145,7 +146,7 @@ def main():
     
     
 
-    tokenize(file_contents)
+    isError = tokenize(file_contents)
 
     if command == "parse":
        for token in tokens:
