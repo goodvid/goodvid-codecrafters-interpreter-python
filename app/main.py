@@ -120,7 +120,7 @@ def tokenize(file_contents):
           isError = True
         i += update
 
-    tokens.append(['EOF','', 'null']) 
+    #tokens.append(['EOF','', 'null']) 
     #print('EOF  null')
     
     
@@ -151,8 +151,8 @@ def main():
 
     if command == "parse":
        for token in tokens:
-          #if token[0] in identifiers:
-            print(token[0].lower())
+          if token[0].lower() in identifiers:
+            print(token[0])
     
     if command == 'tokenize':
       for token in tokens:
