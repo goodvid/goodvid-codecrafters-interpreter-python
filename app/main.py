@@ -145,6 +145,7 @@ def parse():
             print("Error: Unmatched parentheses.")
          else:
             print(content.join(' '))
+         i = start
       if token[1] in identifiers:
             print(token[1])#.lower())
           #dd
