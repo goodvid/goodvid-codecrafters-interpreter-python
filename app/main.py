@@ -151,8 +151,11 @@ def main():
 
     if command == "parse":
        for token in tokens:
-          if token[0].lower() in identifiers:
-            print(token[0].lower())
+          if token[1] in identifiers:
+            print(token[1])#.lower())
+          
+          if token[0] == 'NUMBER':
+             print(token[1])
     
     if command == 'tokenize':
       for token in tokens:
