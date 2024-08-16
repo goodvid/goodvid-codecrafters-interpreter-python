@@ -155,7 +155,7 @@ def main():
             print(token[1])#.lower())
           
           if token[0] == 'NUMBER':
-             print(token[1])
+             print(token[2])
     
     if command == 'tokenize':
       for token in tokens:
