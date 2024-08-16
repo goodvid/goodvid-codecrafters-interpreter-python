@@ -5,15 +5,17 @@ def find_line_end(file, start):
   if '\n' in file[start: ]:
     return file.index('\n', start)
   return len(file)
+tokens = []
+isError = False
 def tokenize(file_contents):
     i = 0
     single_tokens = {'/': 'SLASH','<':'LESS', '>': 'GREATER','!': 'BANG', '=': 'EQUAL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
     double_tokens = {'==':'EQUAL_EQUAL', '!=': 'BANG_EQUAL','<=':'LESS_EQUAL', '>=':'GREATER_EQUAL'}
-    isError = False
+    
     i = 0
-    tokens = []
+    
     while i < (len(file_contents)):
-        #print(i, len(file_contents))
+        
         update = 1
         c = file_contents[i]
         d = file_contents[i : i + 2]
@@ -24,9 +26,9 @@ def tokenize(file_contents):
         
         elif d == '//':
           if ("\n" in file_contents[i: ]):
-            #print("HELLO",find_line_end(file_contents, i) )
+            
             i = find_line_end(file_contents, i) # should be go to that index, not jump by that many
-            #print(update)
+            
           else:
             i = len(file_contents)
         
@@ -39,7 +41,7 @@ def tokenize(file_contents):
           else:
              i = line_end
              line_number = file_contents.count("\n", 0, i) + 1
-             print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
+             #print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
              isError = True
              continue
 
@@ -63,7 +65,7 @@ def tokenize(file_contents):
 
           
           
-          #print(f'NUMBER {number} {number} {start}')
+          
           while (start < len(file_contents) and ((file_contents[start].isdigit() or file_contents[start] == '.'))):
              if (file_contents[start] == '.'):
                 mods += 1
@@ -90,11 +92,11 @@ def tokenize(file_contents):
           ident = ""
           
           while (start < len(file_contents) and (file_contents[start].isalnum() or file_contents[start] == '_')):
-            #print(start)
+            
             ident += file_contents[start]
             start += 1
           i = start - 1
-          if ident in set(["and", "class", "else", "false", "for", "fun", "if", "nil", "or", "print", "return", "super", "this", "true", "var", "while"]):
+          if ident in set(["and", "class", "else", "false", "for", "fun", "if", "nil", "or", "#print", "return", "super", "this", "true", "var", "while"]):
              #print(f'{ident.upper()} {ident} null')
              tokens.append([ident.upper(), ident, 'null'])
           else:
@@ -112,20 +114,18 @@ def tokenize(file_contents):
           tokens.append([single_tokens[c], c, 'null'])
         else:
           line_number = file_contents.count("\n", 0, i) + 1
-          print(f'[line {line_number}] Error: Unexpected character: {c}', file=sys.stderr)
+          #print(f'[line {line_number}] Error: Unexpected character: {c}', file=sys.stderr)
           isError = True
         i += update
 
     tokens.append(['EOF','', 'null']) 
     #print('EOF  null')
-    if isError:
-      exit(65)
     
-    return tokens
+    
+    #return tokens
     
 def main():
-    #jejej
-    # You can use print statements as follows for debugging, they'll be visible when running tests.
+    
     print("Logs from your program will appear here!", file=sys.stderr)
 
     if len(sys.argv) < 1:
@@ -143,23 +143,24 @@ def main():
         file_contents = file.read()
 
     
-    single_tokens = {'/': 'SLASH','<':'LESS', '>': 'GREATER','!': 'BANG', '=': 'EQUAL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
-    double_tokens = {'==':'EQUAL_EQUAL', '!=': 'BANG_EQUAL','<=':'LESS_EQUAL', '>=':'GREATER_EQUAL'}
-    isError = False
-    i = 0
+    
 
-
-    tokens = tokenize(file_contents)
+    tokenize(file_contents)
 
     if command == "parse":
        for token in tokens:
           if token[0] != 'EOF':
             print(token[0].lower())
+    
     if command == 'tokenize':
-       for token in tokens:
-          print(token[0],  token[1],  token[2])
-       
+      for token in tokens:
+            print(token[0],  token[1],  token[2])
+    
+    if isError:
+       exit(65)
     exit(0)
+       
+    
 
           
     
