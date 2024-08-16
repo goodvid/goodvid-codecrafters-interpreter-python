@@ -152,7 +152,7 @@ def main():
 
     if command == "parse":
        for token in tokens:
-          if token[0] != 'eof':
+          if token[0] != 'EOF':
             print(token[0].lower())
     if command == 'tokenize':
        for token in tokens:
