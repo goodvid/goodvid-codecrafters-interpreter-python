@@ -39,7 +39,7 @@ def tokenize(file_contents):
           else:
              i = line_end
              line_number = file_contents.count("\n", 0, i) + 1
-             print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
+             #print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
              isError = True
              continue
 
@@ -50,7 +50,7 @@ def tokenize(file_contents):
             start += 1
           i = end
           
-          print(f'STRING \"{string}\" {string}')
+          #print(f'STRING \"{string}\" {string}')
           tokens.append(['STRING', string, string])
         
         elif c.isdigit():
@@ -80,7 +80,7 @@ def tokenize(file_contents):
           number = float(number)
 
           
-          print(f'NUMBER {value} {number}')
+          #print(f'NUMBER {value} {number}')
           tokens.append(['NUMBER', value, number])
           i = start - 1
             
@@ -95,29 +95,29 @@ def tokenize(file_contents):
             start += 1
           i = start - 1
           if ident in set(["and", "class", "else", "false", "for", "fun", "if", "nil", "or", "print", "return", "super", "this", "true", "var", "while"]):
-             print(f'{ident.upper()} {ident} null')
+             #print(f'{ident.upper()} {ident} null')
              tokens.append([ident.upper(), ident, 'null'])
           else:
             tokens.append(['IDENTIFIER, ident, null'])
-            print(f'IDENTIFIER {ident} null')
+            #print(f'IDENTIFIER {ident} null')
         
         
 
         elif d in double_tokens:
-          print(double_tokens[d] + ' ' + d + ' null')
+          #print(double_tokens[d] + ' ' + d + ' null')
           tokens.append([double_tokens[d], d, 'null'])
           update += 1
         elif c in single_tokens:
-          print(single_tokens[c] + ' ' + c + ' null')
+          #print(single_tokens[c] + ' ' + c + ' null')
           tokens.append([single_tokens[c], c, 'null'])
         else:
           line_number = file_contents.count("\n", 0, i) + 1
-          print(f'[line {line_number}] Error: Unexpected character: {c}', file=sys.stderr)
+          #print(f'[line {line_number}] Error: Unexpected character: {c}', file=sys.stderr)
           isError = True
         i += update
 
       
-    print('EOF  null')
+    #print('EOF  null')
     if isError:
       exit(65)
     
