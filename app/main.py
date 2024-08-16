@@ -153,7 +153,7 @@ def main():
        for token in tokens:
           if token[1] in identifiers:
             print(token[1])#.lower())
-          
+          #dd
           if token[0] == 'NUMBER':
              print(token[2])
           
