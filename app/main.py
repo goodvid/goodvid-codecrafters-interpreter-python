@@ -116,7 +116,7 @@ def tokenize(file_contents):
           isError = True
         i += update
 
-    tokens.append(['EOF',' ', 'null']) 
+    tokens.append(['EOF','', 'null']) 
     #print('EOF  null')
     if isError:
       exit(65)
