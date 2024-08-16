@@ -125,7 +125,34 @@ def tokenize(file_contents):
     
     
     return isError
-    
+
+def parse():
+   i = 0
+   while i < len(tokens):
+      token = tokens[i]
+
+      if token[0] == 'LEFT_PAREN':
+         stack = ['(']
+         start = i
+         content = ['(']
+         while (start < len(tokens)):
+            content.append(tokens[start][2])
+            if tokens[start][0] == 'LEFT_PAREN':
+               stack.append('LEFT_PAREN')
+            elif tokens[start][0] == 'RIGHT_PAREN':
+               stack.pop()
+         if stack:
+            print("Error: Unmatched parentheses.")
+         else:
+            print(content.join(' '))
+      if token[1] in identifiers:
+            print(token[1])#.lower())
+          #dd
+      if token[0] == 'NUMBER':
+             print(token[2])
+          
+      if token[0] == 'STRING':
+             print(token[2])
 def main():
     
     print("Logs from your program will appear here!", file=sys.stderr)
