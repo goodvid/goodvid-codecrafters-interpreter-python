@@ -51,7 +51,7 @@ def tokenize(file_contents):
           i = end
           
           #print(f'STRING \"{string}\" {string}')
-          tokens.append(['STRING', string, string])
+          tokens.append(['STRING', f'\"{string}\"', string])
         
         elif c.isdigit():
            # keep going until its not a number no more (also include , .)
@@ -116,7 +116,7 @@ def tokenize(file_contents):
           isError = True
         i += update
 
-      
+    tokens.append(['EOF',' ', 'null']) 
     #print('EOF  null')
     if isError:
       exit(65)
