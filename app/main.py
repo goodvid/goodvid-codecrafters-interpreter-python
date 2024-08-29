@@ -222,9 +222,9 @@ def is_factor():
 def is_unary():
    if (match('unary')):
       
-      operator = tokens[curr_token - 1][0]
+      operator = tokens[curr_token - 1][1]
       right = is_unary()
-      return [operator, right]
+      return '(' + operator + ' ' +   right + ')'
    else:
       return is_prim()
    
@@ -242,14 +242,7 @@ def is_prim():
       expr = expression()
       if match('paren'):
          return '(group ' + str(expr) + ')'
-   # if tokens[curr_token][0] in ['TRUE','FALSE', 'NIL']:
-   #    curr_token += 1
-   #    return tokens[curr_token - 1][0]
-
-   # if tokens[curr_token][0] in ['NUMBER', 'STRING']:
-   #    curr_token += 1
-   #    return tokens[curr_token - 1][1]
-
+   
    
 def parse():
    
