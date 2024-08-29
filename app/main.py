@@ -233,7 +233,7 @@ def is_prim():
    #curr_token -= 1
    
    if (check[0] and check[1] in ['TRUE','FALSE', 'NIL']):
-      return check[1]
+      return check[1].lower()
    if (check[0] and check[1] in ['NUMBER', 'STRING'] ):
       return tokens[curr_token - 1][2]
    
