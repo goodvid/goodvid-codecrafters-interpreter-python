@@ -206,9 +206,9 @@ def is_comp():
 def is_term():
    left = is_factor()
    while(match('term')):
-      operator = tokens[curr_token - 1][0]
+      operator = tokens[curr_token - 1][1]
       right = is_term()
-      left = [left, operator, right]
+      left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
    return left
 
 def is_factor():
