@@ -143,7 +143,7 @@ def match(token: str): #we know what curr token is, just need what its matching 
          curr_token += 1
          return True
       return False
-   if token == 'comparison':
+   if token == 'compare':
       
       if tokens[curr_token][1] in ['>=', '<=','>','<']:
          curr_token += 1
@@ -198,9 +198,9 @@ def is_equality():
 def is_comp():
    left = is_term()
    while(match('compare')):
-      operator = tokens[curr_token - 1][0]
+      operator = tokens[curr_token - 1][1]
       right = is_term()
-      left = [left, operator, right]
+      left = left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
    return left
 
 def is_term():
