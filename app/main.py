@@ -135,7 +135,7 @@ def match(token: str): #we know what curr token is, just need what its matching 
    
    if curr_token >= len(tokens):
       return False
-   print(token)
+   
    
    if token == 'equality':
       
@@ -221,7 +221,7 @@ def is_factor():
 
 def is_unary():
    if (match('unary')):
-      print('here')
+      
       operator = tokens[curr_token - 1][0]
       right = is_unary()
       return [operator, right]
@@ -231,14 +231,14 @@ def is_unary():
 def is_prim():
    check = match('primary')
    #curr_token -= 1
-   print(check)
+   
    if (check[0] and check[1] in ['TRUE','FALSE', 'NIL']):
       return check[1]
    if (check[0] and check[1] in ['NUMBER', 'STRING'] ):
       return tokens[curr_token - 1][2]
    
    if match('paren'):
-      print('(')
+      
       expr = expression()
       if match('paren'):
          return '(group ' + expr + ')'
