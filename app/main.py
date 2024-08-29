@@ -252,7 +252,7 @@ def is_prim():
 
    
 def parse():
-   print(tokens)
+   
    return expression()
   #  while i < len(tokens):
   #     token = tokens[i]
