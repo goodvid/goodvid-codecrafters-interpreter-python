@@ -214,9 +214,10 @@ def is_term():
 def is_factor():
    left = is_unary()
    while (match('factor')):
-      operator = tokens[curr_token - 1][0]
+      operator = tokens[curr_token - 1][1]
       right = is_unary()
-      left = [left, operator, right]
+      #left = [left, operator, right]
+      left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
    return left
 
 def is_unary():
