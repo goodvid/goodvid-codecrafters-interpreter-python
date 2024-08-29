@@ -224,7 +224,7 @@ def is_unary():
       
       operator = tokens[curr_token - 1][1]
       right = is_unary()
-      return '(' + operator + ' ' +   right + ')'
+      return '(' + operator + ' ' +   str(right) + ')'
    else:
       return is_prim()
    
