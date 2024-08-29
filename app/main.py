@@ -9,8 +9,9 @@ tokens = []
 single_tokens = {'/': 'SLASH','<':'LESS', '>': 'GREATER','!': 'BANG', '=': 'EQUAL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
 double_tokens = {'==':'EQUAL_EQUAL', '!=': 'BANG_EQUAL','<=':'LESS_EQUAL', '>=':'GREATER_EQUAL'}
 identifiers = ["and", "class", "else", "false", "for", "fun", "if", "nil", "or", "#print", "return", "super", "this", "true", "var", "while"]
-    
-    
+file_contents = []
+curr_token = 0  
+
 def tokenize(file_contents):
     i = 0
     
@@ -126,34 +127,161 @@ def tokenize(file_contents):
     
     return isError
 
-def parse():
-   i = 0
-   while i < len(tokens):
-      token = tokens[i]
 
-      if token[0] == 'LEFT_PAREN':
-         stack = ['(']
-         start = i
-         content = ['(', 'group']
-         while (start < len(tokens)):
-            content.append(tokens[start][2])
-            if tokens[start][0] == 'LEFT_PAREN':
-               stack.append('LEFT_PAREN')
-            elif tokens[start][0] == 'RIGHT_PAREN':
-               stack.pop()
-         if stack:
-            print("Error: Unmatched parentheses.")
-         else:
-            print(content.join(' '))
-         i = start
-      if token[1] in identifiers:
-            print(token[1])#.lower())22
-          #dd
-      if token[0] == 'NUMBER':
-             print(token[2])
+
+
+def match(token: str): #we know what curr token is, just need what its matching against
+   global curr_token
+   
+   if curr_token >= len(tokens):
+      return False
+   print(token)
+   
+   if token == 'equality':
+      
+      if tokens[curr_token][1] in ['!=', '==']:
+         curr_token += 1
+         return True
+      return False
+   if token == 'comparison':
+      
+      if tokens[curr_token][1] in ['>=', '<=','>','<']:
+         curr_token += 1
+         return True
+      return False
+   if token == 'term':
+      
+      if tokens[curr_token][1] in ['+', '-']:
+         curr_token += 1
+         return True
+      return False
+   if token == 'factor':
+      #curr_token += 1
+      if tokens[curr_token][1] in ['/','*']:
+         curr_token += 1
+         return True
+      return False
+   if token == 'unary':
+      #curr_token += 1
+      
+      if tokens[curr_token ][1] in ['!', '-']:
+         curr_token += 1
+         return True
+      return False
+   if token == 'primary':
+      
+      #curr_token += 1
+      to_check = tokens[curr_token ][0] 
+      
+      if to_check in ['NUMBER','STRING','TRUE','FALSE','NIL']: #bc lazy, non consistent token check
+         curr_token += 1
+         return [True, to_check]
+      return [False, []]
+   if token == 'paren':
+      #curr_token += 1
+      if tokens[curr_token][1] in ['(',')']:
+         curr_token += 1
+         return True
+      return False
+   return False
+def expression():
+   return is_equality()
+
+def is_equality():
+   left = is_comp()
+   while (match('equality')):
+      operator = tokens[curr_token - 1][0]
+      right = is_comp()
+      left = [left, operator, right]
+   return left
+
+def is_comp():
+   left = is_term()
+   while(match('compare')):
+      operator = tokens[curr_token - 1][0]
+      right = is_term()
+      left = [left, operator, right]
+   return left
+
+def is_term():
+   left = is_factor()
+   while(match('term')):
+      operator = tokens[curr_token - 1][0]
+      right = is_term()
+      left = [left, operator, right]
+   return left
+
+def is_factor():
+   left = is_unary()
+   while (match('factor')):
+      operator = tokens[curr_token - 1][0]
+      right = is_unary()
+      left = [left, operator, right]
+   return left
+
+def is_unary():
+   if (match('unary')):
+      print('here')
+      operator = tokens[curr_token - 1][0]
+      right = is_unary()
+      return [operator, right]
+   else:
+      return is_prim()
+   
+def is_prim():
+   check = match('primary')
+   #curr_token -= 1
+   print(check)
+   if (check[0] and check[1] in ['TRUE','FALSE', 'NIL']):
+      return check[1]
+   if (check[0] and check[1] in ['NUMBER', 'STRING'] ):
+      return tokens[curr_token - 1][2]
+   
+   if match('paren'):
+      print('(')
+      expr = expression()
+      if match('paren'):
+         return '(group ' + expr + ')'
+   # if tokens[curr_token][0] in ['TRUE','FALSE', 'NIL']:
+   #    curr_token += 1
+   #    return tokens[curr_token - 1][0]
+
+   # if tokens[curr_token][0] in ['NUMBER', 'STRING']:
+   #    curr_token += 1
+   #    return tokens[curr_token - 1][1]
+
+   
+def parse():
+   print(tokens)
+   return expression()
+  #  while i < len(tokens):
+  #     token = tokens[i]
+
+  #     if token[0] == 'LEFT_PAREN':
+  #        stack = ['(']
+  #        start = i + 1
+  #        content = ['(group' ]
+  #        while (start < len(tokens)):
+  #           content.append(tokens[start][2])
+  #           if tokens[start][0] == 'LEFT_PAREN':
+  #              stack.append('LEFT_PAREN')
+  #           elif tokens[start][0] == 'RIGHT_PAREN':
+  #              stack.pop()
+  #           start += 1
+  #        if stack:
+  #           print("Error: Unmatched parentheses.", stack)
+  #        else:
+  #           print(' '.join(content))
+  #        i = start
+  #     if token[1] in identifiers:
+  #           print(token[1])#.lower())22
+  #         #dd
+  #     if token[0] == 'NUMBER':
+  #            print(token[2])
           
-      if token[0] == 'STRING':
-             print(token[2])
+  #     if token[0] == 'STRING':
+  #            print(token[2])
+  #     i += 1
 def main():
     
     print("Logs from your program will appear here!", file=sys.stderr)
@@ -178,15 +306,7 @@ def main():
     isError = tokenize(file_contents)
 
     if command == "parse":
-       for token in tokens:
-          if token[1] in identifiers:
-            print(token[1])#.lower())
-          #dd
-          if token[0] == 'NUMBER':
-             print(token[2])
-          
-          if token[0] == 'STRING':
-             print(token[2])
+       print(parse())
     
     if command == 'tokenize':
       for token in tokens:
