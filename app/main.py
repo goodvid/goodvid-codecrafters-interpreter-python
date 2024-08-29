@@ -241,7 +241,7 @@ def is_prim():
       
       expr = expression()
       if match('paren'):
-         return '(group ' + expr + ')'
+         return '(group ' + str(expr) + ')'
    # if tokens[curr_token][0] in ['TRUE','FALSE', 'NIL']:
    #    curr_token += 1
    #    return tokens[curr_token - 1][0]
