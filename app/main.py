@@ -207,7 +207,7 @@ def is_term():
    left = is_factor()
    while(match('term')):
       operator = tokens[curr_token - 1][1]
-      right = is_term()
+      right = is_factor()
       left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
    return left
 
