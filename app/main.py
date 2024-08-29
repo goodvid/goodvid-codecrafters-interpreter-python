@@ -190,9 +190,9 @@ def expression():
 def is_equality():
    left = is_comp()
    while (match('equality')):
-      operator = tokens[curr_token - 1][0]
+      operator = tokens[curr_token - 1][1]
       right = is_comp()
-      left = [left, operator, right]
+      left = left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
    return left
 
 def is_comp():
