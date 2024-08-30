@@ -323,10 +323,10 @@ def evaluate(expr):
             return -1 * right
       if expr.oper == '!':
          if right == 'true':
-            return False
+            return 'false'
          if right in ['false', 'nil']:
-            return True
-         return not right
+            return 'true'
+         return str(not right).lower()
    
    if isinstance(expr, literal): 
       
