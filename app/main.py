@@ -192,36 +192,59 @@ def missing(token: str, line_number: int):
 
 def is_equality():
    left = is_comp()
+   if not left:
+      missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+      return
    while (match('equality')):
       operator = tokens[curr_token - 1][1]
       right = is_comp()
+      if not right:
+         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+         return
       left = left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
    return left
 
 def is_comp():
    left = is_term()
+   if not left:
+      missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+      return
    while(match('compare')):
       operator = tokens[curr_token - 1][1]
       right = is_term()
+      if not right:
+         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+         return
       left = left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
    return left
 
 def is_term():
    left = is_factor()
+   if not left:
+      missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+      return
+
    while(match('term')):
       operator = tokens[curr_token - 1][1]
       right = is_factor()
       if not right:
          missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+         return
       left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
    return left
 
 def is_factor():
    left = is_unary()
+   if not left:
+      missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+      return
    while (match('factor')):
       operator = tokens[curr_token - 1][1]
       right = is_unary()
       #left = [left, operator, right]
+      if not right:
+         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+         return
       left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
    return left
 
@@ -230,6 +253,9 @@ def is_unary():
       
       operator = tokens[curr_token - 1][1]
       right = is_unary()
+      if not right:
+         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+         return
       return '(' + operator + ' ' +   str(right) + ')'
    else:
       return is_prim()
