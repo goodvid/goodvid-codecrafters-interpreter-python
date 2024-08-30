@@ -335,7 +335,7 @@ def evaluate(expr):
          if oper == '*':
             return left * right
          if oper == '/':
-            return left / right
+            return remove_trailing_zeros(left / right)
 
    if isinstance(expr, two_pronged):
       right = evaluate(expr.right)
