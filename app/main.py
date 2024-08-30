@@ -351,7 +351,7 @@ def evaluate(expr):
 
       if expr.oper_type == 'compare':
          if oper == '>':
-            return str(left > right).lower( )
+            return str(left > right).lower(  )
          if oper == '<':
             return str(left < right).lower()
          if oper == '>=':
