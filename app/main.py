@@ -309,7 +309,7 @@ def main():
     
     
 
-    isError = tokenize(file_contents)
+    tokenize(file_contents)
 
     if command == "parse":
        print(parse())
