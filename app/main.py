@@ -362,7 +362,7 @@ def main():
       exit(0)
     
     if command == 'evaluate':
-       print(final_expr)
+       print(final_expr )
     
     if isError:
        exit(65)
