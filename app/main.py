@@ -22,8 +22,9 @@ class two_pronged:
         return f'({self.oper} {self.right})'
 
 class literal:
-    def __init__(self, literal):
+    def __init__(self, literal, lexeme):
         self.literal = literal
+        self.lexeme = lexeme
     def __str__(self):
         return f'{self.literal}'
 
@@ -180,7 +181,7 @@ def is_prim():
          return literal(check[1].lower())
       if (check[0] and check[1] in ['NUMBER', 'STRING'] ):
        
-         return literal(tokens[curr_token - 1][2])
+         return literal(tokens[curr_token - 1][2], tokens[curr_token - 1][1])
    
    if match('paren'):
       
@@ -316,7 +317,10 @@ def parse():
 
 def evaluate(expr):
    if isinstance(expr, literal): 
-      return str(expr.literal)
+      #print(expr.literal)
+      if isinstance(expr.literal, str): 
+         return expr.literal
+      return expr.lexeme
    
 def main():
     
@@ -362,7 +366,7 @@ def main():
       exit(0)
     
     if command == 'evaluate':
-       print(final_expr )
+       print(evaluate(final_expr) )
     
     if isError:
        exit(65)
