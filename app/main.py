@@ -255,6 +255,9 @@ def is_prim():
       expr = expression()
       if match('paren'):
          return '(group ' + str(expr) + ')'
+      else:
+         isError = True
+         #missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
    
    
 def parse():
