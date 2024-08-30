@@ -339,9 +339,9 @@ def evaluate(expr):
       
       if expr.oper_type == 'term':
          if oper == '+':
-            return left + right
+            return remove_trailing_zeros(left + right)
          if oper == '-':
-            return left - right
+            return remove_trailing_zeros(left - right)
 
    if isinstance(expr, two_pronged):
       right = evaluate(expr.right)
