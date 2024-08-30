@@ -1,5 +1,5 @@
 import sys
-
+import math
 # three pronged : left, operator, right
 # two pronged: operator, right
 # literal: number, string or true, false, nil
@@ -367,12 +367,13 @@ def evaluate(expr):
             return str(left != right).lower()
    if isinstance(expr, two_pronged):
       right = evaluate(expr.right)
-      if isinstance(right, str):
-         print('Operand must be a number.\n[line 1]', file=sys.stderr)
-         exit(70)
+      
       if expr.oper == '-':
-         if not isinstance(right, str):
-            return -1 * right
+         if not (isinstance(right, (int, float, complex)) and not isinstance(right, bool)):
+            print('Operand must be a number.\n[line 1]', file=sys.stderr)
+            exit(70)
+         
+         return -1 * right
       if expr.oper == '!':
          if right == 'true':
             return 'false'
