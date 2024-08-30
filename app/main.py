@@ -315,7 +315,9 @@ def parse():
    return final_expr
 
 def evaluate(expr):
+   
    if isinstance(expr, literal): 
+      
       def remove_trailing_zeros(num):
     # Convert to string and strip trailing zeros and the decimal point if needed
          num_str = str(num).rstrip('0').rstrip('.')
@@ -329,6 +331,9 @@ def evaluate(expr):
       if isinstance(expr.literal, str): 
          return expr.literal
       return remove_trailing_zeros(expr.literal)
+   if isinstance(expr, group):
+      #print('ee', expr.expr)
+      return evaluate(expr.expr)
    
 def main():
     
