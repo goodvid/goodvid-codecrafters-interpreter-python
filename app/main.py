@@ -22,9 +22,8 @@ class two_pronged:
         return f'({self.oper} {self.right})'
 
 class literal:
-    def __init__(self, literal, lexeme):
+    def __init__(self, literal):
         self.literal = literal
-        self.lexeme = lexeme
     def __str__(self):
         return f'{self.literal}'
 
@@ -181,7 +180,7 @@ def is_prim():
          return literal(check[1].lower())
       if (check[0] and check[1] in ['NUMBER', 'STRING'] ):
        
-         return literal(tokens[curr_token - 1][2], tokens[curr_token - 1][1])
+         return literal(tokens[curr_token - 1][2])
    
    if match('paren'):
       
@@ -317,13 +316,19 @@ def parse():
 
 def evaluate(expr):
    if isinstance(expr, literal): 
-      #print(expr.literal)
-      return expr.literal
-      # if isinstance(expr.literal, str): 
-      #    print('e')
-      #    return expr.literal
-      # print('ee', expr.literal)
-      # return expr.lexeme
+      def remove_trailing_zeros(num):
+    # Convert to string and strip trailing zeros and the decimal point if needed
+         num_str = str(num).rstrip('0').rstrip('.')
+         
+         # Check if the number is an integer after removing the trailing zeros
+         if '.' not in num_str:
+            return int(num_str)
+         else:
+            return float(num_str)
+      
+      if isinstance(expr.literal, str): 
+         return expr.literal
+      return remove_trailing_zeros(expr.literal)
    
 def main():
     
