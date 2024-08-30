@@ -316,6 +316,17 @@ def parse():
 
 def evaluate(expr):
 
+   if isinstance(expr, three_pronged):
+      left = evaluate(expr.left)
+      right = evaluate(expr.right)
+      oper = expr.oper
+
+      if expr.oper_type == 'factor':
+         if oper == '*':
+            return left * right
+         if oper == '/':
+            return left / right
+
    if isinstance(expr, two_pronged):
       right = evaluate(expr.right)
       if expr.oper == '-':
