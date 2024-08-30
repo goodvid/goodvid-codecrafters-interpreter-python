@@ -11,6 +11,7 @@ double_tokens = {'==':'EQUAL_EQUAL', '!=': 'BANG_EQUAL','<=':'LESS_EQUAL', '>=':
 identifiers = ["and", "class", "else", "false", "for", "fun", "if", "nil", "or", "print", "return", "super", "this", "true", "var", "while"]
 file_contents = []
 curr_token = 0  
+isError = False
 
 def tokenize(file_contents):
     global isError
@@ -127,12 +128,6 @@ def tokenize(file_contents):
     #tokens.append(['EOF','', 'null']) 
     #print('EOF  null')
     
-    
-    
-
-
-
-
 def match(token: str): #we know what curr token is, just need what its matching against
    global curr_token
    
@@ -253,44 +248,18 @@ def is_prim():
    if match('paren'):
       
       expr = expression()
+      
       if match('paren'):
          return '(group ' + str(expr) + ')'
       else:
-         isError = True
-         #missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+         missing('(', 1)
+      
    
    
 def parse():
    
    return expression()
-  #  while i < len(tokens):
-  #     token = tokens[i]
-
-  #     if token[0] == 'LEFT_PAREN':
-  #        stack = ['(']
-  #        start = i + 1
-  #        content = ['(group' ]
-  #        while (start < len(tokens)):
-  #           content.append(tokens[start][2])
-  #           if tokens[start][0] == 'LEFT_PAREN':
-  #              stack.append('LEFT_PAREN')
-  #           elif tokens[start][0] == 'RIGHT_PAREN':
-  #              stack.pop()
-  #           start += 1
-  #        if stack:
-  #           print("Error: Unmatched parentheses.", stack)
-  #        else:
-  #           print(' '.join(content))
-  #        i = start
-  #     if token[1] in identifiers:
-  #           print(token[1])#.lower())22
-  #         #dd
-  #     if token[0] == 'NUMBER':
-  #            print(token[2])
-          
-  #     if token[0] == 'STRING':
-  #            print(token[2])
-  #     i += 1
+  
 def main():
     
     print("Logs from your program will appear here!", file=sys.stderr)
