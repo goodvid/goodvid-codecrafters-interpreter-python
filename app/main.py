@@ -337,7 +337,7 @@ def evaluate(expr):
          if oper == '*':
             return left * right
          if oper == '/':
-            return remove_trailing_zeros(left  / right)
+            return remove_trailing_zeros(left   / right)
       
       if expr.oper_type == 'term':
          if oper == '+':
