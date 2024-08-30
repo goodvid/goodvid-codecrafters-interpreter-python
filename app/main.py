@@ -318,6 +318,8 @@ def evaluate(expr):
    def remove_trailing_zeros(num):
          if num == 0:
             return 0
+         if '.' not in str(num):
+            return num 
     # Convert to string and strip trailing zeros and the decimal point if needed
          num_str = str(num).rstrip('0').rstrip('.')
          
