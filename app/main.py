@@ -366,6 +366,8 @@ def evaluate(expr):
             return str(left != right).lower()
    if isinstance(expr, two_pronged):
       right = evaluate(expr.right)
+      if isinstance(right, str):
+         print('Operand must be a number.\n[line 1]', file=sys.stderr)
       if expr.oper == '-':
          if not isinstance(right, str):
             return -1 * right
