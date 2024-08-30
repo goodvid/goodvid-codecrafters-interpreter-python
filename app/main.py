@@ -236,6 +236,7 @@ def is_term():
 def is_factor():
    left = is_unary()
    if not left:
+      print(tokens, curr_token)
       missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
       return
    while (match('factor')):
@@ -308,6 +309,8 @@ def main():
     
 
     tokenize(file_contents)
+    if isError:
+       exit(65)
 
     if command == "parse":
        output = parse()
