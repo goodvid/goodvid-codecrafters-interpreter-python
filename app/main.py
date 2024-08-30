@@ -334,8 +334,7 @@ def evaluate(expr):
       left = evaluate(expr.left)
       right = evaluate(expr.right)
       oper = expr.oper
-      print(left, right)
-
+      
       if expr.oper_type == 'factor':
          if oper == '*':
             return left * right
