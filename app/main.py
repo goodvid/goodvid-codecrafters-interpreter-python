@@ -312,7 +312,11 @@ def main():
     tokenize(file_contents)
 
     if command == "parse":
-       print(parse())
+       output = parse()
+       if output:
+          print(output)
+       else:
+          print()
     
     if command == 'tokenize':
       for token in tokens:
