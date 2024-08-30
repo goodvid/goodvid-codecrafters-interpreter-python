@@ -315,6 +315,7 @@ def parse():
    return final_expr
 
 def evaluate(expr):
+   global isError
    def remove_trailing_zeros(num):
          if num == 0:
             return 0
@@ -368,6 +369,7 @@ def evaluate(expr):
       right = evaluate(expr.right)
       if isinstance(right, str):
          print('Operand must be a number.\n[line 1]', file=sys.stderr)
+         exit(70)
       if expr.oper == '-':
          if not isinstance(right, str):
             return -1 * right
