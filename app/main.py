@@ -329,6 +329,11 @@ def evaluate(expr):
             return int(num_str)
          else:
             return float(num_str)
+   
+   def is_not_number(isnum):
+      if not (isinstance(isnum, (int, float, complex)) and not isinstance(isnum, bool)):
+            print('Operand must be a number.\n[line 1]', file=sys.stderr)
+            exit(70)
       
 
    if isinstance(expr, three_pronged):
@@ -337,6 +342,8 @@ def evaluate(expr):
       oper = expr.oper
       
       if expr.oper_type == 'factor':
+         is_not_number(right)
+         is_not_number(left)
          if oper == '*':
             return left * right
          if oper == '/':
