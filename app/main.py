@@ -315,6 +315,16 @@ def parse():
    return final_expr
 
 def evaluate(expr):
+   def remove_trailing_zeros(num):
+    # Convert to string and strip trailing zeros and the decimal point if needed
+         num_str = str(num).rstrip('0').rstrip('.')
+         
+         # Check if the number is an integer after removing the trailing zeros
+         if '.' not in num_str:
+            return int(num_str)
+         else:
+            return float(num_str)
+      
 
    if isinstance(expr, three_pronged):
       left = evaluate(expr.left)
@@ -341,15 +351,6 @@ def evaluate(expr):
    
    if isinstance(expr, literal): 
       
-      def remove_trailing_zeros(num):
-    # Convert to string and strip trailing zeros and the decimal point if needed
-         num_str = str(num).rstrip('0').rstrip('.')
-         
-         # Check if the number is an integer after removing the trailing zeros
-         if '.' not in num_str:
-            return int(num_str)
-         else:
-            return float(num_str)
       
       if isinstance(expr.literal, str): 
          return expr.literal
