@@ -318,9 +318,12 @@ def parse():
 def evaluate(expr):
    if isinstance(expr, literal): 
       #print(expr.literal)
-      if isinstance(expr.literal, str): 
-         return expr.literal
-      return expr.lexeme
+      return expr.literal
+      # if isinstance(expr.literal, str): 
+      #    print('e')
+      #    return expr.literal
+      # print('ee', expr.literal)
+      # return expr.lexeme
    
 def main():
     
