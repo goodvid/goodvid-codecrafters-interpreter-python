@@ -358,6 +358,12 @@ def evaluate(expr):
             return str(left >= right).lower()
          if oper == '<=':
             return str(left <= right).lower()
+      
+      if expr.oper_type == 'equality':
+         if oper == '==':
+            return str(left == right).lower()
+         if oper == '!=':
+            return str(left != right).lower()
    if isinstance(expr, two_pronged):
       right = evaluate(expr.right)
       if expr.oper == '-':
