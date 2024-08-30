@@ -349,6 +349,11 @@ def evaluate(expr):
          if oper == '-':
             return remove_trailing_zeros(left - right)
 
+      if expr.oper_type == 'compare':
+         if oper == '>':
+            return str(left > right).lower()
+         if oper == '<':
+            return str(left < right).lower()
    if isinstance(expr, two_pronged):
       right = evaluate(expr.right)
       if expr.oper == '-':
