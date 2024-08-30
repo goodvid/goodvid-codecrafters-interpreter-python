@@ -183,7 +183,9 @@ def match(token: str): #we know what curr token is, just need what its matching 
       return False
    return False
 def expression():
-   return is_equality()
+   output = is_equality()
+    
+   return output
 
 def missing(token: str, line_number: int):
    global isError
@@ -192,12 +194,12 @@ def missing(token: str, line_number: int):
 
 def is_equality():
    left = is_comp()
-   if not left:
-      missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
-      return
+   #print('right', left)
+   
    while (match('equality')):
       operator = tokens[curr_token - 1][1]
       right = is_comp()
+      
       if not right:
          missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
          return
@@ -206,9 +208,10 @@ def is_equality():
 
 def is_comp():
    left = is_term()
-   if not left:
-      missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
-      return
+   #print('right', left)
+   # if not left:
+   #    missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+   #    return
    while(match('compare')):
       operator = tokens[curr_token - 1][1]
       right = is_term()
@@ -220,9 +223,10 @@ def is_comp():
 
 def is_term():
    left = is_factor()
-   if not left:
-      missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
-      return
+   #print('right', left)
+   # if not left:
+   #    missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+   #    return
 
    while(match('term')):
       operator = tokens[curr_token - 1][1]
@@ -235,13 +239,16 @@ def is_term():
 
 def is_factor():
    left = is_unary()
-   if not left:
+   #print('right', left)
+   # if not left:
       
-      missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
-      return
+   #    missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+   #    return
    while (match('factor')):
       operator = tokens[curr_token - 1][1]
+     
       right = is_unary()
+   
       #left = [left, operator, right]
       if not right:
          missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
@@ -265,11 +272,13 @@ def is_prim():
    check = match('primary')
    #curr_token -= 1
    
+   
    if hasattr(check, "__len__"):
    
       if (check[0] and check[1] in ['TRUE','FALSE', 'NIL']):
          return check[1].lower()
       if (check[0] and check[1] in ['NUMBER', 'STRING'] ):
+       
          return tokens[curr_token - 1][2]
    
    if match('paren'):
@@ -285,7 +294,9 @@ def is_prim():
    
 def parse():
    
-   return expression()
+   output = expression()
+   
+   return output
   
 def main():
     
@@ -314,7 +325,8 @@ def main():
 
     if command == "parse":
        output = parse()
-       if output:
+       
+       if output is not None:
           print(output)
        else:
           print()
