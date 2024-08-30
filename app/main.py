@@ -349,16 +349,17 @@ def main():
       for token in tokens:
             print(token[0],  token[1],  token[2])
       print('EOF  null')
-    if isError:
-       exit(65)
+      if isError:
+         exit(65)
+      exit(0)
+    
     parse()
     
     if command == "parse":
       if final_expr: print(final_expr)
-          
-      
-    if isError:
-       exit(65)
+      if isError:
+         exit(65)
+      exit(0)
     
     if command == 'evaluate':
        print(final_expr)
