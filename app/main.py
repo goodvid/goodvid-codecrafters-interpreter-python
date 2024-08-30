@@ -336,6 +336,12 @@ def evaluate(expr):
             return left * right
          if oper == '/':
             return remove_trailing_zeros(left / right)
+      
+      if expr.oper_type == 'term':
+         if oper == '+':
+            return left + right
+         if oper == '-':
+            return left - right
 
    if isinstance(expr, two_pronged):
       right = evaluate(expr.right)
