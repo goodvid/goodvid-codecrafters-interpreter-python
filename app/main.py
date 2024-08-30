@@ -316,6 +316,8 @@ def parse():
 
 def evaluate(expr):
    def remove_trailing_zeros(num):
+         if num == 0:
+            return 0
     # Convert to string and strip trailing zeros and the decimal point if needed
          num_str = str(num).rstrip('0').rstrip('.')
          
