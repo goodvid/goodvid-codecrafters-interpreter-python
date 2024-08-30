@@ -352,17 +352,17 @@ def evaluate(expr):
       if expr.oper_type == 'term':
          if oper == '+':
             if left in ['true', 'false'] or right in ['true', 'false']:
-               print("Operands must be two numbers or two strings.\n[line 1]")
+               print("Operands must be two numbers or two strings.\n[line 1]", file=sys.stderr)
                exit(70)
 
             if type(left) == str and type(right) == str :
                return left + right
             if type(left) == str:
-               print("Operands must be two numbers or two strings.\n[line 1]")
+               print("Operands must be two numbers or two strings.\n[line 1]", file=sys.stderr)
                exit(70)
 
             if type(right) == str:
-               print("Operands must be two numbers or two strings.\n[line 1]")
+               print("Operands must be two numbers or two strings.\n[line 1]", file=sys.stderr)
                exit(70)
 
             return remove_trailing_zeros(left + right)
@@ -372,6 +372,8 @@ def evaluate(expr):
             return remove_trailing_zeros(left - right)
 
       if expr.oper_type == 'compare':
+         is_not_number(right)
+         is_not_number(left)
          if oper == '>':
             return str(left > right).lower(  )
          if oper == '<':
