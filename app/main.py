@@ -315,8 +315,8 @@ def parse():
    return final_expr
 
 def evaluate(expr):
-   if isinstance(expr, literal):
-      return expr.literal
+   if isinstance(expr, literal): 
+      return str(expr.literal)
    
 def main():
     
