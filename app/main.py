@@ -1,6 +1,6 @@
 import sys
-#todo abstract string, number and identifier
-#make a class for token and then add tokens to list
+#todo, add line number to token as 4th value
+# you have to make all the types of parsing a class, or else you are cooked for evaluation
 def find_line_end(file, start):
   if '\n' in file[start: ]:
     return file.index('\n', start)
@@ -13,6 +13,7 @@ file_contents = []
 curr_token = 0  
 
 def tokenize(file_contents):
+    global isError
     i = 0
     
     isError = False
@@ -22,6 +23,8 @@ def tokenize(file_contents):
         update = 1
         c = file_contents[i]
         d = file_contents[i : i + 2]
+
+        line_number = file_contents.count("\n", 0, i) + 1
         
 
         if c == ' ' or c == '\t' or c == '\n':
@@ -56,7 +59,7 @@ def tokenize(file_contents):
           i = end
           
           #print(f'STRING \"{string}\" {string}')
-          tokens.append(['STRING', f'\"{string}\"', string])
+          tokens.append(['STRING', f'\"{string}\"', string, line_number])
         
         elif c.isdigit():
            # keep going until its not a number no more (also include , .)
@@ -86,7 +89,7 @@ def tokenize(file_contents):
 
           
           #print(f'NUMBER {value} {number}')
-          tokens.append(['NUMBER', value, number])
+          tokens.append(['NUMBER', value, number, line_number])
           i = start - 1
             
           
@@ -101,20 +104,20 @@ def tokenize(file_contents):
           i = start - 1
           if ident in set(identifiers):
              #print(f'{ident.upper()} {ident} null')
-             tokens.append([ident.upper(), ident, 'null'])
+             tokens.append([ident.upper(), ident, 'null', line_number])
           else:
-            tokens.append(['IDENTIFIER', ident, 'null'])
+            tokens.append(['IDENTIFIER', ident, 'null', line_number])
             #print(f'IDENTIFIER {ident} null')
         
         
 
         elif d in double_tokens:
           #print(double_tokens[d] + ' ' + d + ' null')
-          tokens.append([double_tokens[d], d, 'null'])
+          tokens.append([double_tokens[d], d, 'null', line_number])
           update += 1
         elif c in single_tokens:
           #print(single_tokens[c] + ' ' + c + ' null')
-          tokens.append([single_tokens[c], c, 'null'])
+          tokens.append([single_tokens[c], c, 'null', line_number])
         else:
           line_number = file_contents.count("\n", 0, i) + 1
           print(f'[line {line_number}] Error: Unexpected character: {c}', file=sys.stderr)
@@ -125,7 +128,7 @@ def tokenize(file_contents):
     #print('EOF  null')
     
     
-    return isError
+    
 
 
 
@@ -171,7 +174,7 @@ def match(token: str): #we know what curr token is, just need what its matching 
    if token == 'primary':
       
       #curr_token += 1
-      to_check = tokens[curr_token ][0] 
+      to_check = tokens[curr_token][0] 
       
       if to_check in ['NUMBER','STRING','TRUE','FALSE','NIL']: #bc lazy, non consistent token check
          curr_token += 1
@@ -186,6 +189,11 @@ def match(token: str): #we know what curr token is, just need what its matching 
    return False
 def expression():
    return is_equality()
+
+def missing(token: str, line_number: int):
+   global isError
+   print(f'[line {line_number}] Error at \'{token}\': Expect expression', file=sys.stderr)
+   isError = True
 
 def is_equality():
    left = is_comp()
@@ -208,6 +216,8 @@ def is_term():
    while(match('term')):
       operator = tokens[curr_token - 1][1]
       right = is_factor()
+      if not right:
+         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
       left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
    return left
 
@@ -233,10 +243,12 @@ def is_prim():
    check = match('primary')
    #curr_token -= 1
    
-   if (check[0] and check[1] in ['TRUE','FALSE', 'NIL']):
-      return check[1].lower()
-   if (check[0] and check[1] in ['NUMBER', 'STRING'] ):
-      return tokens[curr_token - 1][2]
+   if hasattr(check, "__len__"):
+   
+      if (check[0] and check[1] in ['TRUE','FALSE', 'NIL']):
+         return check[1].lower()
+      if (check[0] and check[1] in ['NUMBER', 'STRING'] ):
+         return tokens[curr_token - 1][2]
    
    if match('paren'):
       
