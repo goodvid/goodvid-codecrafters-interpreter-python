@@ -320,9 +320,18 @@ def main():
     
 
     tokenize(file_contents)
+    
+
+    
+    
+    if command == 'tokenize':
+      for token in tokens:
+            print(token[0],  token[1],  token[2])
+      print('EOF  null')
     if isError:
        exit(65)
-
+    
+   
     if command == "parse":
        output = parse()
        
@@ -330,11 +339,6 @@ def main():
           print(output)
        else:
           print()
-    
-    if command == 'tokenize':
-      for token in tokens:
-            print(token[0],  token[1],  token[2])
-      print('EOF  null')
     
     if isError:
        exit(65)
