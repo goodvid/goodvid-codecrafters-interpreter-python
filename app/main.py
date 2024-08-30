@@ -315,6 +315,18 @@ def parse():
    return final_expr
 
 def evaluate(expr):
+
+   if isinstance(expr, two_pronged):
+      right = evaluate(expr.right)
+      if expr.oper == '-':
+         if not isinstance(right, str):
+            return -1 * right
+      if expr.oper == '!':
+         if right == 'true':
+            return False
+         if right in ['false', 'nil']:
+            return True
+         return not right
    
    if isinstance(expr, literal): 
       
