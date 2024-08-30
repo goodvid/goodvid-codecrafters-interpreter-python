@@ -1,4 +1,8 @@
 import sys
+from classes import three_pronged
+from classes import two_pronged
+from classes import literal
+from classes import group
 #todo, add line number to token as 4th value
 # you have to make all the types of parsing a class, or else you are cooked for evaluation
 def find_line_end(file, start):
@@ -11,7 +15,154 @@ double_tokens = {'==':'EQUAL_EQUAL', '!=': 'BANG_EQUAL','<=':'LESS_EQUAL', '>=':
 identifiers = ["and", "class", "else", "false", "for", "fun", "if", "nil", "or", "print", "return", "super", "this", "true", "var", "while"]
 file_contents = []
 curr_token = 0  
+final_expr = None
 isError = False
+   
+def match(token: str): #we know what curr token is, just need what its matching against
+   global curr_token
+   
+   if curr_token >= len(tokens):
+      return False
+   
+   
+   if token == 'equality':
+      
+      if tokens[curr_token][1] in ['!=', '==']:
+         curr_token += 1
+         return True
+      return False
+   if token == 'compare':
+      
+      if tokens[curr_token][1] in ['>=', '<=','>','<']:
+         curr_token += 1
+         return True
+      return False
+   if token == 'term':
+      
+      if tokens[curr_token][1] in ['+', '-']:
+         curr_token += 1
+         return True
+      return False
+   if token == 'factor':
+      #curr_token += 1
+      if tokens[curr_token][1] in ['/','*']:
+         curr_token += 1
+         return True
+      return False
+   if token == 'unary':
+      #curr_token += 1
+      
+      if tokens[curr_token ][1] in ['!', '-']:
+         curr_token += 1
+         return True
+      return False
+   if token == 'primary':
+      
+      #curr_token += 1
+      to_check = tokens[curr_token][0] 
+      
+      if to_check in ['NUMBER','STRING','TRUE','FALSE','NIL']: #bc lazy, non consistent token check
+         curr_token += 1
+         return [True, to_check]
+      return [False, []]
+   if token == 'paren':
+      #curr_token += 1
+      if tokens[curr_token][1] in ['(',')']:
+         curr_token += 1
+         return True
+      return False
+   return False
+def expression():
+   output = is_equality()
+   
+   return output
+
+def missing(token: str, line_number: int):
+   global isError
+   print(f'[line {line_number}] Error at \'{token}\': Expect expression', file=sys.stderr)
+   isError = True
+
+def is_equality():
+   left = is_comp()
+   while (match('equality')):
+      operator = tokens[curr_token - 1][1]
+      right = is_comp()
+      
+      if not right:
+         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+         return
+      left = three_pronged(oper_type='equality', oper=operator, left=left, right=right)
+   return left
+
+def is_comp():
+   left = is_term()
+   while(match('compare')):
+      operator = tokens[curr_token - 1][1]
+      right = is_term()
+      if not right:
+         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+         return
+      left = three_pronged(oper_type='compare', oper=operator, left=left, right=right)
+   return left
+
+def is_term():
+   left = is_factor()
+
+   while(match('term')):
+      operator = tokens[curr_token - 1][1]
+      right = is_factor()
+      if not right:
+         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+         return
+      left = three_pronged(oper_type='term', oper=operator, left=left, right=right)
+   return left
+
+def is_factor():
+   left = is_unary()
+   while (match('factor')):
+      operator = tokens[curr_token - 1][1]
+     
+      right = is_unary()
+      if not right:
+         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+         return
+      
+      left = three_pronged(oper_type='factor', oper=operator, left=left, right=right)
+   return left
+
+def is_unary():
+   if (match('unary')):
+      
+      operator = tokens[curr_token - 1][1]
+      right = is_unary()
+      if not right:
+         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
+         return
+     
+      return two_pronged(oper=operator, right=right)
+   else:
+      return is_prim()
+   
+def is_prim():
+   check = match('primary')
+   if hasattr(check, "__len__"):
+   
+      if (check[0] and check[1] in ['TRUE','FALSE', 'NIL']):
+         return literal(check[1].lower())
+      if (check[0] and check[1] in ['NUMBER', 'STRING'] ):
+       
+         return literal(tokens[curr_token - 1][2])
+   
+   if match('paren'):
+      
+      expr = expression()
+      
+      if match('paren'):
+         #return '(group ' + str(expr) + ')'
+         return group(expr=expr)
+      else:
+         missing('(', 1)
+      
 
 def tokenize(file_contents):
     global isError
@@ -126,179 +277,20 @@ def tokenize(file_contents):
         i += update
 
     #tokens.append(['EOF','', 'null']) 
-    #print('EOF  null')
-    
-def match(token: str): #we know what curr token is, just need what its matching against
-   global curr_token
-   
-   if curr_token >= len(tokens):
-      return False
-   
-   
-   if token == 'equality':
-      
-      if tokens[curr_token][1] in ['!=', '==']:
-         curr_token += 1
-         return True
-      return False
-   if token == 'compare':
-      
-      if tokens[curr_token][1] in ['>=', '<=','>','<']:
-         curr_token += 1
-         return True
-      return False
-   if token == 'term':
-      
-      if tokens[curr_token][1] in ['+', '-']:
-         curr_token += 1
-         return True
-      return False
-   if token == 'factor':
-      #curr_token += 1
-      if tokens[curr_token][1] in ['/','*']:
-         curr_token += 1
-         return True
-      return False
-   if token == 'unary':
-      #curr_token += 1
-      
-      if tokens[curr_token ][1] in ['!', '-']:
-         curr_token += 1
-         return True
-      return False
-   if token == 'primary':
-      
-      #curr_token += 1
-      to_check = tokens[curr_token][0] 
-      
-      if to_check in ['NUMBER','STRING','TRUE','FALSE','NIL']: #bc lazy, non consistent token check
-         curr_token += 1
-         return [True, to_check]
-      return [False, []]
-   if token == 'paren':
-      #curr_token += 1
-      if tokens[curr_token][1] in ['(',')']:
-         curr_token += 1
-         return True
-      return False
-   return False
-def expression():
-   output = is_equality()
-    
-   return output
-
-def missing(token: str, line_number: int):
-   global isError
-   print(f'[line {line_number}] Error at \'{token}\': Expect expression', file=sys.stderr)
-   isError = True
-
-def is_equality():
-   left = is_comp()
-   #print('right', left)
-   
-   while (match('equality')):
-      operator = tokens[curr_token - 1][1]
-      right = is_comp()
-      
-      if not right:
-         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
-         return
-      left = left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
-   return left
-
-def is_comp():
-   left = is_term()
-   #print('right', left)
-   # if not left:
-   #    missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
-   #    return
-   while(match('compare')):
-      operator = tokens[curr_token - 1][1]
-      right = is_term()
-      if not right:
-         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
-         return
-      left = left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
-   return left
-
-def is_term():
-   left = is_factor()
-   #print('right', left)
-   # if not left:
-   #    missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
-   #    return
-
-   while(match('term')):
-      operator = tokens[curr_token - 1][1]
-      right = is_factor()
-      if not right:
-         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
-         return
-      left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
-   return left
-
-def is_factor():
-   left = is_unary()
-   #print('right', left)
-   # if not left:
-      
-   #    missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
-   #    return
-   while (match('factor')):
-      operator = tokens[curr_token - 1][1]
-     
-      right = is_unary()
-   
-      #left = [left, operator, right]
-      if not right:
-         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
-         return
-      left = '('+operator+ ' ' + str(left) + ' ' + str(right) + ')'
-   return left
-
-def is_unary():
-   if (match('unary')):
-      
-      operator = tokens[curr_token - 1][1]
-      right = is_unary()
-      if not right:
-         missing(tokens[curr_token - 1][1], tokens[curr_token - 1][3])
-         return
-      return '(' + operator + ' ' +   str(right) + ')'
-   else:
-      return is_prim()
-   
-def is_prim():
-   check = match('primary')
-   #curr_token -= 1
-   
-   
-   if hasattr(check, "__len__"):
-   
-      if (check[0] and check[1] in ['TRUE','FALSE', 'NIL']):
-         return check[1].lower()
-      if (check[0] and check[1] in ['NUMBER', 'STRING'] ):
-       
-         return tokens[curr_token - 1][2]
-   
-   if match('paren'):
-      
-      expr = expression()
-      
-      if match('paren'):
-         return '(group ' + str(expr) + ')'
-      else:
-         missing('(', 1)
-      
-   
+    #print('EOF  null')  
    
 def parse():
+   global final_expr
+   final_expr = expression()
    
-   output = expression()
+   return final_expr
+
+def evaluate(expr):
+   if isinstance(expr, literal):
+      return expr.literal
    
-   return output
-  
 def main():
+    
     
     print("Logs from your program will appear here!", file=sys.stderr)
 
@@ -309,7 +301,7 @@ def main():
     command = sys.argv[1]
     filename = sys.argv[2]
 
-    if command not in set(['tokenize', 'parse']):
+    if command not in set(['tokenize', 'parse', 'evaluate']):
         print(f"Unknown command: {command}", file=sys.stderr)
         exit(1)
 
@@ -330,15 +322,17 @@ def main():
       print('EOF  null')
     if isError:
        exit(65)
+    parse()
     
-   
     if command == "parse":
-       output = parse()
-       
-       if output is not None:
-          print(output)
-       else:
-          print()
+      if final_expr: print(final_expr)
+          
+      
+    if isError:
+       exit(65)
+    
+    if command == 'evaluate':
+       print(final_expr)
     
     if isError:
        exit(65)
