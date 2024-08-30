@@ -351,10 +351,24 @@ def evaluate(expr):
       
       if expr.oper_type == 'term':
          if oper == '+':
-            if type(left) == str and type(right) == str:
+            if left in ['true', 'false'] or right in ['true', 'false']:
+               print("Operands must be two numbers or two strings.\n[line 1]")
+               exit(70)
+
+            if type(left) == str and type(right) == str :
                return left + right
+            if type(left) == str:
+               print("Operands must be two numbers or two strings.\n[line 1]")
+               exit(70)
+
+            if type(right) == str:
+               print("Operands must be two numbers or two strings.\n[line 1]")
+               exit(70)
+
             return remove_trailing_zeros(left + right)
          if oper == '-':
+            is_not_number(right)
+            is_not_number(left)
             return remove_trailing_zeros(left - right)
 
       if expr.oper_type == 'compare':
