@@ -343,6 +343,8 @@ def evaluate(expr):
       
       if expr.oper_type == 'term':
          if oper == '+':
+            if type(left) == str and type(right) == str:
+               return left + right
             return remove_trailing_zeros(left + right)
          if oper == '-':
             return remove_trailing_zeros(left - right)
