@@ -5,6 +5,8 @@ import math
 # literal: number, string or true, false, nil
 # group: (group expression)
 
+
+
 class three_pronged:
     def __init__(self, oper_type, oper, left, right):
         self.oper_type = oper_type
@@ -34,10 +36,7 @@ class group:
         return f'(group {self.expr})'
 #todo, add line number to token as 4th value
 # you have to make all the types of parsing a class, or else you are cooked for evaluation
-def find_line_end(file, start):
-  if '\n' in file[start: ]:
-    return file.index('\n', start)
-  return len(file)
+
 tokens = []
 single_tokens = {'/': 'SLASH','<':'LESS', '>': 'GREATER','!': 'BANG', '=': 'EQUAL', ';': 'SEMICOLON','-': 'MINUS','{' : 'LEFT_BRACE', '}': 'RIGHT_BRACE','(': 'LEFT_PAREN', ')': 'RIGHT_PAREN', '*': 'STAR', '.': 'DOT', ',': 'COMMA', '+': 'PLUS'}
 double_tokens = {'==':'EQUAL_EQUAL', '!=': 'BANG_EQUAL','<=':'LESS_EQUAL', '>=':'GREATER_EQUAL'}
@@ -46,14 +45,28 @@ file_contents = []
 curr_token = 0  
 final_expr = None
 isError = False
-   
+def find_line_end(file, start):
+  if '\n' in file[start: ]:
+    return file.index('\n', start)
+  return len(file)
+
 def match(token: str): #we know what curr token is, just need what its matching against
    global curr_token
    
    if curr_token >= len(tokens):
       return False
    
-   
+   if token == 'print':
+      if tokens[curr_token][1] == 'print':
+         curr_token += 1
+         return True
+      return False
+   if token == 'semicolon':
+      if tokens[curr_token][1] == ';':
+         curr_token += 1
+         return True
+      return False
+
    if token == 'equality':
       
       if tokens[curr_token][1] in ['!=', '==']:
@@ -101,15 +114,26 @@ def match(token: str): #we know what curr token is, just need what its matching 
          return True
       return False
    return False
+
+def statement():
+   if (match('print')):
+      expr = expression()
+      if not expr:
+         exit(65)
+      match('semicolon')
+      return ['print',expr]
+   expr = expression()   
+   match('semicolon')
+   return ['expr',expr]
+
 def expression():
    output = is_equality()
    
    return output
 
 def missing(token: str, line_number: int):
-   global isError
    print(f'[line {line_number}] Error at \'{token}\': Expect expression', file=sys.stderr)
-   isError = True
+   exit(65)
 
 def is_equality():
    left = is_comp()
@@ -191,8 +215,13 @@ def is_prim():
          return group(expr=expr)
       else:
          missing('(', 1)
-      
 
+def collect_stmts():
+   statements = []
+   while curr_token < len(tokens):
+      statements.append(statement())
+   return statements
+  
 def tokenize(file_contents):
     global isError
     i = 0
@@ -200,13 +229,11 @@ def tokenize(file_contents):
     isError = False
     while i < (len(file_contents)):
         
-        
         update = 1
         c = file_contents[i]
         d = file_contents[i : i + 2]
 
         line_number = file_contents.count("\n", 0, i) + 1
-        
 
         if c == ' ' or c == '\t' or c == '\n':
           pass
@@ -231,6 +258,7 @@ def tokenize(file_contents):
              print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
              isError = True
              continue
+            #exit(65)
 
           string = ""
 
@@ -303,16 +331,22 @@ def tokenize(file_contents):
           line_number = file_contents.count("\n", 0, i) + 1
           print(f'[line {line_number}] Error: Unexpected character: {c}', file=sys.stderr)
           isError = True
+          
         i += update
 
     #tokens.append(['EOF','', 'null']) 
     #print('EOF  null')  
+    return isError
    
 def parse():
-   global final_expr
-   final_expr = expression()
+   # global final_expr
+   # final_expr = expression()
    
-   return final_expr
+   # return final_expr
+   statements = []
+   while curr_token < len(tokens):
+      statements.append(statement())
+   return statements
 
 def evaluate(expr):
    global isError
@@ -413,9 +447,9 @@ def evaluate(expr):
    if isinstance(expr, group):
       #print('ee', expr.expr)
       return evaluate(expr.expr)
-   
+      
+
 def main():
-    
     
     print("Logs from your program will appear here!", file=sys.stderr)
 
@@ -426,39 +460,41 @@ def main():
     command = sys.argv[1]
     filename = sys.argv[2]
 
-    if command not in set(['tokenize', 'parse', 'evaluate']):
+    if command not in set(['tokenize', 'parse', 'evaluate', 'run']):
         print(f"Unknown command: {command}", file=sys.stderr)
         exit(1)
 
     with open(filename) as file:
         file_contents = file.read()
 
-    
-    
-
-    tokenize(file_contents)
-    
-
-    
-    
+    err = tokenize(file_contents)
     if command == 'tokenize':
       for token in tokens:
             print(token[0],  token[1],  token[2])
       print('EOF  null')
-      if isError:
+      if err:
          exit(65)
       exit(0)
     
-    parse()
+    stmts = parse()
     
     if command == "parse":
-      if final_expr: print(final_expr)
-      if isError:
+      if stmts: 
+         for stmt in stmts:
+            print(stmt[1])
+      if err:
          exit(65)
       exit(0)
     
     if command == 'evaluate':
-       print(evaluate(final_expr) )
+       for stmt in stmts:
+          if (stmt[0] == 'expr'):
+            print(evaluate(stmt[1]))
+
+    if command == 'run':
+       for stmt in stmts:
+         if stmt[0] == 'print':
+          print(evaluate(stmt[1]))
     
     if isError:
        exit(65)
