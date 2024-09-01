@@ -510,6 +510,8 @@ def main():
        for stmt in stmts:
          if stmt[0] == 'print':
           print(evaluate(stmt[1]))
+         elif stmt[0] == 'expr':
+            evaluate(stmt[1])
     
     if isError:
        exit(65)
