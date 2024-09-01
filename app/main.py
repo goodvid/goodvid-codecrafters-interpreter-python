@@ -249,15 +249,26 @@ def tokenize(file_contents):
         elif c == '\"':
           start = i + 1
           line_end = find_line_end(file_contents, i)
+         #  if file_contents.count('\"') % 2 == 1:
+         #     i = line_end
+         #     line_number = file_contents.count("\n", 0, i) + 1
+         #     print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
+         #     isError = True
+         #     continue
+             
+             
           
-          if '\"' in file_contents[start : line_end]:
-             end = file_contents.index('\"', start, line_end)
-          else:
+          
+          
+          #quote_end = file_contents.index('\"', start + 1)
+          if '\"' not in file_contents[start:]:
              i = line_end
              line_number = file_contents.count("\n", 0, i) + 1
              print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
              isError = True
              continue
+             
+          end = file_contents.index('\"', start)
             #exit(65)
 
           string = ""
@@ -266,8 +277,12 @@ def tokenize(file_contents):
             string += file_contents[start]
             start += 1
           i = end
+          string = string.rstrip()
           
-          #print(f'STRING \"{string}\" {string}')
+          
+          if string == '(' :
+             string = '\n('
+          
           tokens.append(['STRING', f'\"{string}\"', string, line_number])
         
         elif c.isdigit():
