@@ -148,9 +148,10 @@ def statement():
          
          var_name = tokens[curr_token - 1][1]
          
-         match('assign') #check if change needed
-         
-         expr = expression()
+         if not match('assign'): #check if change needed
+            expr = literal('nil')
+         else:
+            expr = expression()
          var_names[var_name] = expr
          match('semicolon')
          
