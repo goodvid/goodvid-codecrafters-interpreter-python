@@ -392,7 +392,7 @@ def parse():
       statements.append(statement())
    return statements
 
-def evaluate(expr):
+def evaluate(expr, line):
    global isError
    def remove_trailing_zeros(num):
          if num == 0:
@@ -410,13 +410,13 @@ def evaluate(expr):
    
    def is_not_number(isnum):
       if not (isinstance(isnum, (int, float, complex)) and not isinstance(isnum, bool)):
-            print('Operand must be a number.\n[line 1]', file=sys.stderr)
+            print(f'Operand must be a number.\n[line {line}]', file=sys.stderr)
             exit(70)
       
 
    if isinstance(expr, three_pronged):
-      left = evaluate(expr.left)
-      right = evaluate(expr.right)
+      left = evaluate(expr.left, line=line)
+      right = evaluate(expr.right, line=line)
       oper = expr.oper
       
       if expr.oper_type == 'factor':
@@ -430,17 +430,17 @@ def evaluate(expr):
       if expr.oper_type == 'term':
          if oper == '+':
             if left in ['true', 'false'] or right in ['true', 'false']:
-               print("Operands must be two numbers or two strings.\n[line 1]", file=sys.stderr)
+               print(f"Operands must be two numbers or two strings.\n[line {line}]", file=sys.stderr)
                exit(70)
 
             if type(left) == str and type(right) == str :
                return left + right
             if type(left) == str:
-               print("Operands must be two numbers or two strings.\n[line 1]", file=sys.stderr)
+               print(f"Operands must be two numbers or two strings.\n[line {line}]", file=sys.stderr)
                exit(70)
 
             if type(right) == str:
-               print("Operands must be two numbers or two strings.\n[line 1]", file=sys.stderr)
+               print(f"Operands must be two numbers or two strings.\n[line {line}]", file=sys.stderr)
                exit(70)
 
             return remove_trailing_zeros(left + right)
@@ -467,11 +467,11 @@ def evaluate(expr):
          if oper == '!=':
             return str(left != right).lower()
    if isinstance(expr, two_pronged):
-      right = evaluate(expr.right)
+      right = evaluate(expr.right, line=line)
       
       if expr.oper == '-':
          if not (isinstance(right, (int, float, complex)) and not isinstance(right, bool)):
-            print('Operand must be a number.\n[line 1]', file=sys.stderr)
+            print(f'Operand must be a number.\n[line {line}]', file=sys.stderr)
             exit(70)
          
          return -1 * right
@@ -489,10 +489,13 @@ def evaluate(expr):
          return expr.literal
       return remove_trailing_zeros(expr.literal)
    if isinstance(expr, var):
-      return evaluate(var_names[expr.name])
+      if expr.name not in var_names:
+         print(f'Undefined variable \'{expr.name}\'.\n[line {line}]', file=sys.stderr)
+         exit(70)
+      return evaluate(var_names[expr.name], line=line)
    if isinstance(expr, group):
       #print('ee', expr.expr)
-      return evaluate(expr.expr)
+      return evaluate(expr.expr, line=line)
       
 
 def main():
@@ -533,16 +536,20 @@ def main():
       exit(0)
     
     if command == 'evaluate':
+       count = 1
        for stmt in stmts:
           if (stmt[0] == 'expr'):
-            print(evaluate(stmt[1]))
+            print(evaluate(stmt[1], count))
+          count += 1
 
     if command == 'run':
+       count = 1
        for stmt in stmts:
          if stmt[0] == 'print':
-          print(evaluate(stmt[1]))
+          print(evaluate(stmt[1],  count))
          elif stmt[0] == 'expr':
-            evaluate(stmt[1])
+            evaluate(stmt[1], count)
+         count += 1
     
     if isError:
        exit(65)
