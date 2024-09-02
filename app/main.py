@@ -29,6 +29,13 @@ class literal:
     def __str__(self):
         return f'{self.literal}'
 
+class var:
+   def __init__(self, name):
+        self.name = name
+   def __str__(self):
+        return f'{self.literal}'
+
+
 class group:
     def __init__(self, expr):
         self.expr = expr
@@ -45,17 +52,34 @@ file_contents = []
 curr_token = 0  
 final_expr = None
 isError = False
+var_names = {}
 def find_line_end(file, start):
   if '\n' in file[start: ]:
     return file.index('\n', start)
   return len(file)
 
 def match(token: str): #we know what curr token is, just need what its matching against
+   
    global curr_token
    
    if curr_token >= len(tokens):
       return False
    
+   if token == 'var':
+      if tokens[curr_token][1] == 'var':
+         curr_token += 1
+         return True
+      return False
+   if token == 'ident':
+      if tokens[curr_token][0] == 'IDENTIFIER':
+         curr_token += 1
+         return True
+      return False
+   if token == 'assign':
+      if tokens[curr_token][0] == 'EQUAL':
+         curr_token += 1
+         return True
+      return False
    if token == 'print':
       if tokens[curr_token][1] == 'print':
          curr_token += 1
@@ -116,6 +140,24 @@ def match(token: str): #we know what curr token is, just need what its matching 
    return False
 
 def statement():
+   if (match('var')):
+      
+      
+         #store var name 
+         match('ident')
+         
+         var_name = tokens[curr_token - 1][1]
+         
+         match('assign') #check if change needed
+         
+         expr = expression()
+         var_names[var_name] = expr
+         match('semicolon')
+         
+         return ['ident', var_name]
+
+
+         
    if (match('print')):
       expr = expression()
       if not expr:
@@ -215,12 +257,13 @@ def is_prim():
          return group(expr=expr)
       else:
          missing('(', 1)
+   
+   if match('ident'):
+      return var(tokens[curr_token - 1][1])
 
-def collect_stmts():
-   statements = []
-   while curr_token < len(tokens):
-      statements.append(statement())
-   return statements
+      
+
+
   
 def tokenize(file_contents):
     global isError
@@ -249,18 +292,7 @@ def tokenize(file_contents):
         elif c == '\"':
           start = i + 1
           line_end = find_line_end(file_contents, i)
-         #  if file_contents.count('\"') % 2 == 1:
-         #     i = line_end
-         #     line_number = file_contents.count("\n", 0, i) + 1
-         #     print(f"[line {line_number}] Error: Unterminated string.", file=sys.stderr)
-         #     isError = True
-         #     continue
-             
-             
-          
-          
-          
-          #quote_end = file_contents.index('\"', start + 1)
+         
           if '\"' not in file_contents[start:]:
              i = line_end
              line_number = file_contents.count("\n", 0, i) + 1
@@ -293,9 +325,6 @@ def tokenize(file_contents):
 
           mods = 0
 
-          
-          
-          
           while (start < len(file_contents) and ((file_contents[start].isdigit() or file_contents[start] == '.'))):
              if (file_contents[start] == '.'):
                 mods += 1
@@ -453,12 +482,14 @@ def evaluate(expr):
             return 'true'
          return str(not right).lower()
    
-   if isinstance(expr, literal): 
+   if isinstance(expr, literal):
       
       
       if isinstance(expr.literal, str): 
          return expr.literal
       return remove_trailing_zeros(expr.literal)
+   if isinstance(expr, var):
+      return evaluate(var_names[expr.name])
    if isinstance(expr, group):
       #print('ee', expr.expr)
       return evaluate(expr.expr)

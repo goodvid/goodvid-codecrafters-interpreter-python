@@ -1,4 +1,5 @@
 #!/bin/bash
 
-codecrafters test
-codecrafters submit
+git add .
+git commit -m "attempting $1"
+git push
