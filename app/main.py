@@ -74,6 +74,12 @@ def match(token: str): #we know what curr token is, just need what its matching 
    if curr_token >= len(tokens):
       return False
    
+   if token == 'LEFT_BRACE':
+      if tokens[curr_token][1] == '{':
+         curr_token += 1
+         return True
+      return False
+   
    if token == 'var':
       if tokens[curr_token][1] == 'var':
          curr_token += 1
@@ -167,6 +173,10 @@ def statement():
          
          return ['ident', var_name, expr]
    
+   if match('LEFT_BRACE'):
+      statements = []
+      
+      statements.append(statement())
 
 
          
@@ -331,11 +341,6 @@ def tokenize(file_contents):
             string += file_contents[start]
             start += 1
           i = end
-          string = string.rstrip()
-          
-          
-          if string == '(' :
-             string = '\n('
           
           tokens.append(['STRING', f'\"{string}\"', string, line_number])
         
