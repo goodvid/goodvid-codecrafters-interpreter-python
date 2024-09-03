@@ -32,8 +32,17 @@ class literal:
 class var:
    def __init__(self, name):
         self.name = name
+        
    def __str__(self):
-        return f'{self.literal}'
+        return f'{self.name}'
+   
+class assign:
+   def __init__(self, name, value):
+        self.name = name
+        self.value = value
+        
+   def __str__(self):
+        return f'{self.name} = {self.value}'
 
 
 class group:
@@ -126,6 +135,7 @@ def match(token: str): #we know what curr token is, just need what its matching 
       
       #curr_token += 1
       to_check = tokens[curr_token][0] 
+      #print('to check', to_check)
       
       if to_check in ['NUMBER','STRING','TRUE','FALSE','NIL']: #bc lazy, non consistent token check
          curr_token += 1
@@ -152,10 +162,11 @@ def statement():
             expr = literal('nil')
          else:
             expr = expression()
-         var_names[var_name] = expr
+         
          match('semicolon')
          
-         return ['ident', var_name]
+         return ['ident', var_name, expr]
+   
 
 
          
@@ -164,13 +175,22 @@ def statement():
       if not expr:
          exit(65)
       match('semicolon')
-      return ['print',expr]
+      return ['print',expr, None]
    expr = expression()   
    match('semicolon')
-   return ['expr',expr]
+   return ['expr',expr, None]
 
 def expression():
    output = is_equality()
+   if match('assign'):
+
+      value = expression()
+      if isinstance(output, var):
+         name = output.name
+         return assign(name, value)
+      
+      print(f'[line {tokens[curr_token - 1][-1]}] Error at \'=\': Invalid assignment target.', file=sys.stderr)
+      exit(65)
    
    return output
 
@@ -242,6 +262,7 @@ def is_unary():
 def is_prim():
    check = match('primary')
    if hasattr(check, "__len__"):
+      #print('in here', check)
    
       if (check[0] and check[1] in ['TRUE','FALSE', 'NIL']):
          return literal(check[1].lower())
@@ -454,7 +475,7 @@ def evaluate(expr, line):
          is_not_number(right)
          is_not_number(left)
          if oper == '>':
-            return str(left > right).lower(  )
+            return str(left > right).lower()
          if oper == '<':
             return str(left < right).lower()
          if oper == '>=':
@@ -490,10 +511,22 @@ def evaluate(expr, line):
          return expr.literal
       return remove_trailing_zeros(expr.literal)
    if isinstance(expr, var):
+
       if expr.name not in var_names:
          print(f'Undefined variable \'{expr.name}\'.\n[line {line}]', file=sys.stderr)
          exit(70)
-      return evaluate(var_names[expr.name], line=line)
+      return var_names[expr.name]
+   
+   if isinstance(expr, assign):
+
+      if expr.name not in var_names:
+         
+         print(f'Undefined variable \'{expr.name}\'.\n[line {line}]', file=sys.stderr)
+         exit(70)
+      val = evaluate(expr.value, line=line)
+      var_names[expr.name] = val
+      return val
+   
    if isinstance(expr, group):
       #print('ee', expr.expr)
       return evaluate(expr.expr, line=line)
@@ -550,6 +583,8 @@ def main():
           print(evaluate(stmt[1],  count))
          elif stmt[0] == 'expr':
             evaluate(stmt[1], count)
+         elif stmt[0] == 'ident':
+            var_names[stmt[1]] = evaluate(stmt[2], count)
          count += 1
     
     if isError:
