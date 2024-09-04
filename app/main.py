@@ -75,7 +75,13 @@ def match(token: str): #we know what curr token is, just need what its matching 
       return False
    
    if token == 'LEFT_BRACE':
-      if tokens[curr_token][1] == '{':
+      if tokens[curr_token][1] in ['{']:
+         curr_token += 1
+         return True
+      return False
+   
+   if token == 'RIGHT_BRACE':
+      if tokens[curr_token][1] in ['}' ]:
          curr_token += 1
          return True
       return False
@@ -175,8 +181,18 @@ def statement():
    
    if match('LEFT_BRACE'):
       statements = []
+
+      while(curr_token < len(tokens) and tokens[curr_token][1] != '}' ):
       
-      statements.append(statement())
+         statements.append(statement())
+
+      #print(tokens[curr_token - 1], curr_token, len(tokens))
+      
+      if not match('RIGHT_BRACE'):
+         print(f'[line {tokens[curr_token - 1][-1]}] ' +  "Error at end: Expect \'}\'", file=sys.stderr)
+         exit(65)
+
+      return ['block', statements]
 
 
          
@@ -535,7 +551,18 @@ def evaluate(expr, line):
    if isinstance(expr, group):
       #print('ee', expr.expr)
       return evaluate(expr.expr, line=line)
-      
+
+def run(stmt, count):
+   if stmt[0] == 'print':
+          print(evaluate(stmt[1],  count))
+   elif stmt[0] == 'expr':
+            evaluate(stmt[1], count)
+   elif stmt[0] == 'ident':
+            var_names[stmt[1]] = evaluate(stmt[2], count)
+   elif stmt[0] == 'block':
+            for block in stmt[1]:
+               run(block, count)
+
 
 def main():
     
@@ -584,12 +611,7 @@ def main():
     if command == 'run':
        count = 1
        for stmt in stmts:
-         if stmt[0] == 'print':
-          print(evaluate(stmt[1],  count))
-         elif stmt[0] == 'expr':
-            evaluate(stmt[1], count)
-         elif stmt[0] == 'ident':
-            var_names[stmt[1]] = evaluate(stmt[2], count)
+         run(stmt, count)
          count += 1
     
     if isError:
