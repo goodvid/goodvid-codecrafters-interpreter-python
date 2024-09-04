@@ -6,7 +6,10 @@ import math
 # group: (group expression)
 
 
-
+class vars:
+   var_names = {}
+   def __init__(self):
+      self.var_names = {}
 class three_pronged:
     def __init__(self, oper_type, oper, left, right):
         self.oper_type = oper_type
@@ -61,7 +64,7 @@ file_contents = []
 curr_token = 0  
 final_expr = None
 isError = False
-var_names = {}
+
 def find_line_end(file, start):
   if '\n' in file[start: ]:
     return file.index('\n', start)
@@ -162,6 +165,7 @@ def match(token: str): #we know what curr token is, just need what its matching 
    return False
 
 def statement():
+   global var_names
    if (match('var')):
       
       
@@ -180,7 +184,10 @@ def statement():
          return ['ident', var_name, expr]
    
    if match('LEFT_BRACE'):
+      
       statements = []
+
+      
 
       while(curr_token < len(tokens) and tokens[curr_token][1] != '}' ):
       
@@ -191,7 +198,10 @@ def statement():
       if not match('RIGHT_BRACE'):
          print(f'[line {tokens[curr_token - 1][-1]}] ' +  "Error at end: Expect \'}\'", file=sys.stderr)
          exit(65)
-
+      
+      
+      
+      
       return ['block', statements]
 
 
@@ -533,35 +543,47 @@ def evaluate(expr, line):
       return remove_trailing_zeros(expr.literal)
    if isinstance(expr, var):
 
-      if expr.name not in var_names:
+      if expr.name not in vars.var_names:
          print(f'Undefined variable \'{expr.name}\'.\n[line {line}]', file=sys.stderr)
          exit(70)
-      return var_names[expr.name]
+      
+      
+      
+      return vars.var_names[expr.name]
    
    if isinstance(expr, assign):
 
-      if expr.name not in var_names:
+      if expr.name not in vars.var_names:
          
          print(f'Undefined variable \'{expr.name}\'.\n[line {line}]', file=sys.stderr)
          exit(70)
       val = evaluate(expr.value, line=line)
-      var_names[expr.name] = val
+      vars.var_names[expr.name] = val
       return val
    
    if isinstance(expr, group):
       #print('ee', expr.expr)
       return evaluate(expr.expr, line=line)
 
+
 def run(stmt, count):
+   
    if stmt[0] == 'print':
-          print(evaluate(stmt[1],  count))
+          print( evaluate(stmt[1],  count))
    elif stmt[0] == 'expr':
             evaluate(stmt[1], count)
    elif stmt[0] == 'ident':
-            var_names[stmt[1]] = evaluate(stmt[2], count)
+            vars.var_names[stmt[1]] = evaluate(stmt[2], count)
+            
    elif stmt[0] == 'block':
+            previous = vars.var_names.copy()
+            
             for block in stmt[1]:
+               
                run(block, count)
+            
+            vars.var_names = previous
+            
 
 
 def main():
@@ -608,6 +630,7 @@ def main():
             print(evaluate(stmt[1], count))
           count += 1
 
+    
     if command == 'run':
        count = 1
        for stmt in stmts:
